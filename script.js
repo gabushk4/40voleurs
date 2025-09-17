@@ -1,5 +1,16 @@
+const dropdown = document.querySelector(".dropdown-content");
+
 function toggleDropdown() {
-  document.querySelector(".dropdown").classList.toggle("show");
+  const parent = document.querySelector(".dropdown");
+  parent.classList.toggle("show");
+
+  if (parent.classList.contains("show")) {
+    // ouverture
+    dropdown.style.height = dropdown.scrollHeight + "px";
+  } else {
+    // fermeture
+    dropdown.style.height = "0px";
+  }
 }
 
 window.addEventListener("click", function(e) {

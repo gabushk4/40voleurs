@@ -11,6 +11,7 @@
     </head>
     <body>
         <header>
+            <div class="header-image"></div>
             <nav class="nav-custom">
                 <div class="nav-I">
                         <a href="index.php">
@@ -23,9 +24,9 @@
                         </button>
                     </form>
                 </div>
-                <ul>
+                <ul class="nav-menu">
                     <li>
-                        <a class="" aria-current="page" href="#">vendre</a>
+                        <a aria-current="page" href="#">vendre</a>
                     </li>
                     <li class="dropdown">
                         <a class="dropdown-button" onclick="toggleDropdown()">catégories ▼</a>
@@ -35,10 +36,16 @@
                             <li><a href="#">vêtements</a></li>
                         </ul>
                     </li>
+                    <li>
+                        <a href="#">à propos</a>
+                    </li>
                 </ul>   
-                <div class="">
-
-                </div>             
+                <div id="compte-btns">
+                    <button class="btn-normal">connexion</button>
+                    <div class="separateur"/>
+                    <button class="btn-imp">inscription</button>
+                </div> 
+                <a id="hamburger">☰</a>            
             </nav>
         </header>
         <main>
