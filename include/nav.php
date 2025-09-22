@@ -11,6 +11,7 @@
         </form>
     </div>
     <ul class="nav-menu">
+        <a id="hamburger">☰</a>   
         <li>
             <a aria-current="page" href="#">vendre</a>
         </li>
@@ -30,6 +31,5 @@
         <button class="btn-normal">connexion</button>
         <div class="separateur"/>
         <button class="btn-imp">inscription</button>
-    </div> 
-    <a id="hamburger">☰</a>            
+    </div>              
 </nav>

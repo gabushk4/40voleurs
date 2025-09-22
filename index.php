@@ -32,12 +32,14 @@
                             echo '<div class="annonce">
                                     <img src="./assets/'.$annonce[IMAGE_I].'"/>
                                     <div class="annonce-texte-conteneur">
-                                        <h2>'.$annonce[TITRE_I].'</h2>
-                                        <h3>'.$annonce[DESCRIPTION_I].'</h3>
+                                        <div>
+                                            <h2>'.$annonce[TITRE_I].'</h2>
+                                            <h3>'.$annonce[DESCRIPTION_I].'</h3>
+                                        </div>
                                         <div class="annonce-soustexte-conteneur">
                                             <p>'.$annonce[PRIX_I].'$</p>
                                             <p>'.$negociable.'</p>
-                                            <p>'.$annonce[AUTEUR_I].'</p>
+                                            <p class="annonce-auteur">'.$annonce[AUTEUR_I].'</p>
                                         </div>
                                     </div>
                                 </div>';

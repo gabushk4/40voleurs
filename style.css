@@ -24,13 +24,15 @@
     }
     #hamburger{
         display: block;
+        height: 100%;
+        width: auto;
         opacity: 1;
         visibility: visible;
         font-size: 24px;
         background: none;
         border: none;
         cursor: pointer;
-        color: var(primary);
+        color: var(--primary);
     }
 }
 
@@ -43,6 +45,9 @@ body{
     background-color: var(--primary) !important;
     max-width: var(--max-width);
     margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 header{
     width: 100%;      
@@ -205,32 +210,30 @@ button:hover{
     cursor: pointer;
 }
 main{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 colonnes de largeur égale */
+    gap: 38px; /* espace entre les annonces */
     width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: baseline;
-    flex-wrap: wrap;
-    gap:40px;
-    height: 3000px;
+    height: fit-content;
     margin: 16px auto;
     box-sizing: border-box;
 }
 .annonce{
-    height: 364px;
-    width: 300px;
+    height: 424px;
+    width: 344px;
     border: 1px solid var(--secondary);
     border-radius: var(--radius);    
     overflow: hidden;
     background-color: black;
+    color: var(--secondary);;
 }
 .annonce-texte-conteneur{
     padding: 0px 4px 0px 4px;
     height: 50%;
     background-color: var(--primary);
-}
-.annonce-soustexte-conteneur{
-    align-self: baseline;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 .annonce img{
     height: 50%;
@@ -239,14 +242,22 @@ main{
     display: block; 
 }
 .annonce h2{
-    color: var(--accent)
+    display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .annonce h3{
-    display: -webkit-box;             /* conteneur flexible vertical */
-        -webkit-line-clamp: 3;            /* max lignes */
-        -webkit-box-orient: vertical;     /* orientation verticale */
-    overflow: hidden;                 /* cache ce qui dépasse */
-    text-overflow: ellipsis;       
+    display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color:var(--secondary);
+}
+.annonce-auteur{
+    font-weight: bold;
 }
 
 
