@@ -4,6 +4,7 @@
     --accent:hsla(46, 83%, 40%, 1);
     --hover:hsl(46, 20%, 40%);
     --radius:0.5rem;
+    --max-width:1500px;
 }
 
 @media (max-width: 768px) {
@@ -40,13 +41,11 @@
 
 body{    
     background-color: var(--primary) !important;
+    max-width: var(--max-width);
+    margin: 0 auto;
 }
 header{
-    max-width: 1400px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;   
+    width: 100%;      
 }
 .header-image{
     background-image: url(./assets/banniere.jpg);
@@ -66,6 +65,9 @@ header{
     padding: 0px 16px;
     height: 64px;
     width: 100%;
+    position: sticky;
+    top:0;
+    z-index: 100;
 }
 .nav-menu{
     display: flex;
@@ -73,12 +75,84 @@ header{
     color:var(--primary);
     gap: 16px;
 }
+.nav-I{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;    
+}
+.barre-rech{
+    display: flex;
+    direction: row;
+}
+.barre-rech > input{
+    background-color: var(--primary);
+    padding-left: 8px;
+    border:1px solid var(--primary) ;
+    border-top-left-radius: var(--radius);
+    border-bottom-left-radius: var(--radius);
+}
+.barre-rech > button{
+    border-top-right-radius: var(--radius);
+    border-bottom-right-radius: var(--radius);
+}
+nav li{
+    display: flex;
+    justify-content: center;
+}
+nav a{
+    text-decoration-line: none;
+    color: var(--primary);
+    transition: color 0.3s ease-in;
+}
+.dropdown {
+  position: relative;
+}
+.dropdown-button {
+  color: var(--accent);
+  cursor: pointer;
+}
+.dropdown-content {    
+    position: absolute;
+    top: 80%;
+    background-color: var(--accent);
+    min-width: 160px;
+    max-width: 200px;
+    flex-direction: column;
+    box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
+    border-radius: 6px;
+    z-index: 1;
+
+    /*transition*/
+    display: block;
+    flex-direction: column;
+    opacity: 0;
+    height: 0;
+    transition: height 0.3s ease-in, opacity 0.3s ease-in;
+}
+.dropdown-content a {
+  color: var(--secondary);
+  padding: 8px 12px;
+  width: 100%;
+  align-items: center;
+  text-decoration: none;
+  transition: background-color 0.3s ease-in;
+}
+.dropdown-content a:hover {
+  background-color: hsla(64, 18%, 70%, 0.4);
+}
+.dropdown.show .dropdown-content {
+/* ouvert */
+  display: block;
+  opacity: 1;
+  visibility: visible;
+  overflow: hidden;
+}
 #hamburger{
     display: none;
     opacity: 0;
     transition: visibility 0.3s ease-in, opacity 0.3s ease-in;
 }
-
 #compte-btns{
     height: 40px;
     width: 128px;
@@ -122,36 +196,6 @@ button{
     justify-content: center;    
     color: var(--primary);
 }
-.nav-I{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;    
-}
-.barre-rech{
-    display: flex;
-    direction: row;
-}
-.barre-rech > input{
-    background-color: var(--primary);
-    padding-left: 8px;
-    border:1px solid var(--primary) ;
-    border-top-left-radius: var(--radius);
-    border-bottom-left-radius: var(--radius);
-}
-.barre-rech > button{
-    border-top-right-radius: var(--radius);
-    border-bottom-right-radius: var(--radius);
-}
-nav li{
-    display: flex;
-    justify-content: center;
-}
-nav a{
-    text-decoration-line: none;
-    color: var(--primary);
-    transition: color 0.3s ease-in;
-}
 form button{
     margin-left: -1px;
     
@@ -160,52 +204,27 @@ button:hover{
     background-color: var(--hover);
     cursor: pointer;
 }
-.dropdown {
-  position: relative;
+main{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap:40px;
+    height: 3000px;
+    margin: 16px auto;
+    box-sizing: border-box;
+}
+.annonce{
+    height: 364px;
+    width: 300px;
+    border: 1px solid var(--secondary);
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+.annonce img{
+    height: 50%;
+    width: 100%;
 }
 
-.dropdown-button {
-  color: var(--accent);
-  cursor: pointer;
-}
-
-.dropdown-content {
-    
-    position: absolute;
-    top: 80%;
-    background-color: var(--accent);
-    min-width: 160px;
-    max-width: 200px;
-    flex-direction: column;
-    box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
-    border-radius: 6px;
-    z-index: 1;
-
-    /*transition*/
-    display: block;
-    flex-direction: column;
-    opacity: 0;
-    height: 0;
-    transition: height 0.3s ease-in, opacity 0.3s ease-in;
-}
-
-.dropdown-content a {
-  color: var(--secondary);
-  padding: 8px 12px;
-  width: 100%;
-  align-items: center;
-  text-decoration: none;
-  transition: background-color 0.3s ease-in;
-}
-
-.dropdown-content a:hover {
-  background-color: hsla(64, 18%, 70%, 0.4);
-}
-
-.dropdown.show .dropdown-content {
-/* ouvert */
-  display: block;
-  opacity: 1;
-  visibility: visible;
-  overflow: hidden;
-}
