@@ -22,15 +22,19 @@
                 define("NEGOCIABLE_I",3);
                 define("IMAGE_I",4);
                 define("AUTEUR_I",5);
-                @ $annoncesF = fopen('./data/annonces.csv', 'r');
+                define("URL", "https://prog101.com/cours/kb9/bd/annonces.csv");
+                @ $annoncesF = fopen(URL, 'r');
 
                 if($annoncesF){
                     while(!feof($annoncesF)){
-                        $annonce = fgetcsv($annoncesF, null, ':');
+                        $annonce = fgetcsv($annoncesF, null, '|');
                         if(is_array($annonce)){
+                            $annonce = array_map('strip_tags', $annonce);
                             $negociable = $annonce[NEGOCIABLE_I] == "oui" ? "Négociable" : "Non négociable";
                             echo '<div class="annonce">
-                                    <img src="./assets/'.$annonce[IMAGE_I].'"/>
+                                    <a href="'.$annonce[IMAGE_I].'" target="_blank">
+                                        <img src="'.$annonce[IMAGE_I].'"/>
+                                    </a>
                                     <div class="annonce-texte-conteneur">
                                         <div>
                                             <h2>'.$annonce[TITRE_I].'</h2>
@@ -43,7 +47,6 @@
                                         </div>
                                     </div>
                                 </div>';
-
                         }else{
                             echo <<<EOF
                                 <div class="annonce">
@@ -68,5 +71,6 @@
                 }
             ?>
         </main>
+        <?php include './include/footer.php'?>
     </body>
 </html>

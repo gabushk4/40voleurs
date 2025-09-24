@@ -1,8 +1,9 @@
 <nav class="nav-custom">
     <div class="nav-I">
-            <a href="index.php">
-                <img src="./assets/brand.png" class="" href="./index.php">
-            </a>
+        <a href="index.php" class="brand">
+            <img src="./assets/brand.png" class="" href="./index.php">
+            <p>Les 40 voleurs</p>
+        </a>
         <form class="barre-rech" role="search">
             <input class="" type="search" placeholder="rechercher" aria-label="recherche"/>
             <button class="btn-normal" type="submit">
