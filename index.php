@@ -33,7 +33,7 @@
                             $negociable = $annonce[NEGOCIABLE_I] == "oui" ? "Négociable" : "Non négociable";
                             echo '<div class="annonce">
                                     <a href="'.$annonce[IMAGE_I].'" target="_blank">
-                                        <img src="'.$annonce[IMAGE_I].'"/>
+                                        <img src="'.$annonce[IMAGE_I].'" alt="'.$annonce[TITRE_I].'"/>
                                     </a>
                                     <div class="annonce-texte-conteneur">
                                         <div>

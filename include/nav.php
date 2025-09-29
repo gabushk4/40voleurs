@@ -1,7 +1,7 @@
 <nav class="nav-custom">
     <div class="nav-I">
         <a href="index.php" class="brand">
-            <img src="./assets/brand.png" class="" href="./index.php">
+            <img src="./assets/brand.png" class="" href="./index.php" alt="raton-laveur">
             <p>Les 40 voleurs</p>
         </a>
         <form class="barre-rech" role="search">
