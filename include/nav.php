@@ -14,7 +14,7 @@
     <ul class="nav-menu">
         <a id="hamburger">☰</a>   
         <li>
-            <a aria-current="page" href="#">vendre</a>
+            <a href="./vendre.php">vendre</a>
         </li>
         <li class="dropdown">
             <a class="dropdown-button" onclick="toggleDropdown()">catégories ▼</a>

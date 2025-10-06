@@ -5,3 +5,5 @@
         <a>à propos</a>
     </div>
 </footer>
+    </body>
+</html>
