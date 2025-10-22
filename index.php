@@ -5,15 +5,25 @@
     <main class="vitrine">
         <?php
             define("URL", "https://prog101.com/cours/kb9/bd/annonces.csv");
-            @ $annoncesF = fopen(URL, 'r');
+            @ $annoncesF = fopen('./data.csv', 'r');
 
             if($annoncesF){
                 include './include/funcAfficherAnnonce.php';
-                while(!feof($annoncesF)){
-                    $annonce = fgetcsv($annoncesF, null, '|');
-                    afficherAnnonce($annonce);
-                }
-                fclose($annoncesF);
+                $annonces = [];
+
+            // lire toutes les lignes dans un tableau
+            while (($annonce = fgetcsv($annoncesF, 0, '|')) !== false) {
+                $annonces[] = $annonce;
+            }
+            fclose($annoncesF);
+
+            // inverser l'ordre
+            $annonces = array_reverse($annonces);
+
+            // afficher
+            foreach ($annonces as $annonce) {
+                afficherAnnonce($annonce);
+            }
             }else {
                 echo <<<FIN
                     Votre commande ne peut être traitée<br>

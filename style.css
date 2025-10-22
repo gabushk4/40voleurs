@@ -6,6 +6,22 @@
     --radius:0.5rem;
     --max-width:1500px;
 }
+:root[data-theme="clair"]{
+    --primary:hsla(64, 18%, 70%, 1);
+    --secondary:hsla(64, 10%, 20%, 1);
+    --accent:hsla(46, 83%, 40%, 1);
+    --hover:hsl(46, 20%, 40%);
+    --radius:0.5rem;
+    --max-width:1500px;
+}
+:root[data-theme="sombre"]{
+    --primary:hsla(64, 18%, 20%, 1);
+    --secondary:hsla(64, 10%, 80%, 1);
+    --accent:hsla(46, 83%, 40%, 1);
+    --hover:hsl(46, 20%, 20%);
+    --radius:0.5rem;
+    --max-width:1500px;
+}
 
 @media (max-width: 768px) {
     .nav-menu{
@@ -118,6 +134,7 @@ header{
     border:1px solid var(--primary) ;
     border-top-left-radius: var(--radius);
     border-bottom-left-radius: var(--radius);
+    color: var(--secondary);
 }
 .barre-rech > button{
     border-top-right-radius: var(--radius);
@@ -131,6 +148,9 @@ nav a{
     text-decoration-line: none;
     color: var(--primary);
     transition: color 0.3s ease-in;
+}
+nav label{
+    color:var(--primary);
 }
 .dropdown {
   position: relative;
@@ -216,12 +236,12 @@ button{
     color: var(--secondary);     
 }
 .btn-normal{
-    background-color: var(--secondary);
-    border:1px solid var(--primary);   
+    background-color: var(--primary);
+    border:1px solid var(--accent);   
     display: flex;
     align-items: center;
     justify-content: center;    
-    color: var(--primary);
+    color: var(--secondary);
 }
 form button{
     margin-left: -1px;
@@ -236,7 +256,7 @@ button:hover{
     grid-template-columns: repeat(4, 1fr); /* 4 colonnes de largeur égale */
     gap: 38px; /* espace entre les annonces */
     width: 100%;
-    height: fit-content;
+    height: 100%;
     margin: 16px auto;
     box-sizing: border-box;
 }
@@ -366,6 +386,13 @@ h1{
 }
 .erreur{
     color:var(--accent)
+
+}
+.revenir-accueil{
+    margin-top: 8;
+    margin-bottom: 8;
+    height: 24;
+    align-self: center;
 
 }
 

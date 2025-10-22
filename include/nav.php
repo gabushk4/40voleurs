@@ -27,7 +27,10 @@
         <li>
             <a href="#">à propos</a>
         </li>
-    </ul>   
+    </ul>  
+    <div id="theme">
+        <button id="theme-toggle" class="btn-normal">Changer de thème</button>
+    </div> 
     <div id="compte-btns">
         <button class="btn-normal">connexion</button>
         <div class="separateur"/>
