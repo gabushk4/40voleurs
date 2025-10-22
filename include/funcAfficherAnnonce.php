@@ -9,7 +9,7 @@ define('DATE_AJOUT', 6);
 function afficherAnnonce($annonce) {    
     if(is_array($annonce)){
         $annonce = array_map('strip_tags', $annonce);
-        $negociable = $annonce[NEGOCIABLE_I] == "oui" ? "Négociable" : "Non négociable";
+        $negociable = $annonce[NEGOCIABLE_I] == "oui" ? "négociable" : "non négociable";
         $image = strlen($annonce[IMAGE_I])>1?$annonce[IMAGE_I]:'./assets/brand.png';
         $date = date('d-m-Y', $annonce[DATE_AJOUT]);
         $prix = $annonce[PRIX_I] == 0 ? 'gratuit' : "$annonce[2]$";
