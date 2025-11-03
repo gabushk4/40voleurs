@@ -1,3 +1,12 @@
+<?php
+    $connecte = false;
+    session_start();
+
+    if(isset($_SESSION['connecte'])){
+        $connecte = true;
+    }
+?>
+
 <nav class="nav-custom">
     <div class="nav-I">
         <a href="index.php" class="brand">
@@ -31,9 +40,19 @@
     <div id="theme">
         <button id="theme-toggle" class="btn-normal">Changer de thème</button>
     </div> 
-    <div id="compte-btns">
-        <button class="btn-normal">connexion</button>
-        <div class="separateur"/>
-        <button class="btn-imp">inscription</button>
-    </div>              
+
+    <?php
+        if($connecte)
+            echo "<a href='deconnexion.php'>se deconnecter</a>";
+        else{
+            echo "
+                <div id='compte-btns'>
+                    <button class='btn-normal'>connexion</button>
+                    <div class='separateur'/>
+                    <button class='btn-imp'>inscription</button>
+                </div>      
+            ";
+        }
+    ?>
+            
 </nav>
