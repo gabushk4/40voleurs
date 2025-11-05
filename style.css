@@ -202,21 +202,23 @@ nav label{
 }
 #compte-btns{
     height: 40px;
-    width: 128px;
-    background-color: var(--accent);
     display: flex;
-    flex-direction: row;
     align-items: center;
-    border-radius: var(--radius);
+    flex-direction: row;
     overflow: hidden;
-    border: 1px solid var(--primary)
 }
-#compte-btns > button{
-    border: none;
+#compte-btns > a{
+    justify-content: center;
+    align-items: center;
+    text-decoration: none; /* retire le soulignement */
+    height: 100%;
+    font-size: 16;
+    padding: 2px 4px; /* petit confort visuel */
+    transition: background-color 0.3s ease-in;
 }
 .separateur{
     width: 2px;
-    height: 90%;
+    height: 100%;
     background-color: var(--secondary);
 }
 a:hover{
@@ -232,7 +234,11 @@ button{
     border: none;
 }
 .btn-imp{
-    background-color: var(--accent);      
+    background-color: var(--accent); 
+    border:1px solid var(--primary);   
+    display: flex;
+    align-items: center;
+    justify-content: center;        
     color: var(--secondary);     
 }
 .btn-normal{
@@ -319,7 +325,7 @@ footer div{
     align-items: center;
     justify-content: center;
 }
-.main-vendre{
+.main-form{
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -327,9 +333,8 @@ footer div{
     height: 100%;
     margin: 16px auto;
 }
-.form-vendre{
+.form-perso{
     margin-top: 16px;
-    width: 40%;
 }
 .form-ligne{
     display: flex;
@@ -338,7 +343,7 @@ footer div{
     height: fit-content;
     font-size: 24px;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
     margin-bottom: 8px;
     color: var(--secondary);
 }
@@ -381,6 +386,9 @@ footer div{
     color:var(--primary);
     font-size: 20px;
 }
+.fieldset{
+    padding: 0px 8px;
+}
 h1{
     color: var(--secondary);
 }
@@ -388,11 +396,17 @@ h1{
     color:var(--accent)
 
 }
+.succes{
+    color:green;
+}
 .revenir-accueil{
     margin-top: 8;
     margin-bottom: 8;
     height: 24;
     align-self: center;
 
+}
+.connecte{
+    color:var(--primary);
 }
 

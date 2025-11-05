@@ -2,7 +2,7 @@
     $connecte = false;
     session_start();
 
-    if(isset($_SESSION['connecte'])){
+    if(isset($_SESSION['connecteA40V'])){
         $connecte = true;
     }
 ?>
@@ -23,7 +23,9 @@
     <ul class="nav-menu">
         <a id="hamburger">☰</a>   
         <li>
-            <a href="./vendre.php">vendre</a>
+            <?php if($connecte)
+                echo "<a href='./vendre.php'>vendre</a>";
+            ?>
         </li>
         <li class="dropdown">
             <a class="dropdown-button" onclick="toggleDropdown()">catégories ▼</a>
@@ -36,21 +38,28 @@
         <li>
             <a href="#">à propos</a>
         </li>
+        <li>
+            <?php 
+                if($connecte == true)
+                    echo "<a href='deconnexion.php'>se deconnecter</a>";
+            ?>
+        </li>
     </ul>  
     <div id="theme">
         <button id="theme-toggle" class="btn-normal">Changer de thème</button>
     </div> 
 
     <?php
-        if($connecte)
-            echo "<a href='deconnexion.php'>se deconnecter</a>";
-        else{
+        if(!$connecte){
+            echo "<div id='compte-btns'>
+                    <a class='btn-normal' href='connexion.php'>connexion</a>
+                    <a class='btn-imp' href='inscription.php'>inscription</a>  
+                <div> 
+            ";
+        }else if (isset($_SESSION['pseudo'])){
+            $pseudo = $_SESSION['pseudo'];
             echo "
-                <div id='compte-btns'>
-                    <button class='btn-normal'>connexion</button>
-                    <div class='separateur'/>
-                    <button class='btn-imp'>inscription</button>
-                </div>      
+                <p class='connecte'>Bienvenu $pseudo</p>
             ";
         }
     ?>
