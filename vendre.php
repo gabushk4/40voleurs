@@ -121,9 +121,10 @@
                 
             ?>
         </div>
-        <h2 class="erreur"><?=
-            $_GET['message']??''?></h2>
-        <fieldset title="vendre">
+        <h2>Vendre</h2>
+        <h3 class="erreur"><?=
+            $_GET['message']??''?></h3>
+        <fieldset class="fieldset" title="vendre">
             <form class="form-perso" method="POST">
                 <div class="form-ligne">
                     <label for="titre">titre</label>

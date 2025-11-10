@@ -38,12 +38,6 @@
         <li>
             <a href="#">à propos</a>
         </li>
-        <li>
-            <?php 
-                if($connecte == true)
-                    echo "<a href='deconnexion.php'>se deconnecter</a>";
-            ?>
-        </li>
     </ul>  
     <div id="theme">
         <button id="theme-toggle" class="btn-normal">Changer de thème</button>
@@ -59,7 +53,16 @@
         }else if (isset($_SESSION['pseudo'])){
             $pseudo = $_SESSION['pseudo'];
             echo "
-                <p class='connecte'>Bienvenu $pseudo</p>
+            <form action='deconnexion.php'>
+                <div class='nav-I'>
+                    <p class='connecte'>bienvenu $pseudo</p>
+                    <button class='btn-normal' type='submit'>
+                        <img 
+                            src='./assets/deconnexion.png' width='32' height='32' alt='deconnexion'
+                        />
+                    </button>
+                <div>
+            </form>
             ";
         }
     ?>
