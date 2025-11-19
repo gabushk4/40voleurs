@@ -15,7 +15,7 @@ function afficherAnnonce($annonce) {
         $prix = $annonce[PRIX_I] == 0 ? 'gratuit' : "$annonce[2]$";
         echo '<div class="annonce">
                 <a href="'.$annonce[IMAGE_I].'" target="_blank">
-                    <img src="'.$image.'" alt="'.$image.'"/>
+                    <img src="http://142.44.247.33/~usager41/quarante_voleurs'.$image.'" alt="'.$image.'"/>
                 </a>
                 <div class="annonce-texte-conteneur">
                     <div>

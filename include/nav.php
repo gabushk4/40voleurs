@@ -55,7 +55,7 @@
             echo "
             <form action='deconnexion.php'>
                 <div class='nav-I'>
-                    <p class='connecte'>bienvenu $pseudo</p>
+                    <p class='connecte'>bienvenue $pseudo</p>
                     <button class='btn-normal' type='submit'>
                         <img 
                             src='./assets/deconnexion.png' width='32' height='32' alt='deconnexion'

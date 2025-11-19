@@ -18,84 +18,97 @@
                 const MAX_PSEUDO = 20;
                 const URL_BASE = 'http://142.44.247.33/~usager41/quarante_voleurs/vendre.php';
 
+                $message = '';
                 $method = $_SERVER['REQUEST_METHOD'];
-                
 
-                if($method == "POST"){
-                    $message = '';
-                    $erreurDebut = 'impossible de continuer la demande, ';
-                    $erreurComplement = 'veuillez réessayer';
+                if($method == "POST"){                    
                     $dateAjout = time();
                     $pseudo = $_SESSION['pseudo'];
 
-                    @$fData = fopen('./data.csv', 'a');       
+                    @$fData = fopen('./data.csv', 'a');   
+                    @$negociable = $_POST['negociable'] == 'on' ? 'oui' : 'non';    
                     @$valeursSet =  @isset(
                         $_POST['titre'],
                         $_POST['description'],
                         $_POST['prix'],
-                        $pseudo);   
+                        $pseudo)  && ($negociable == 'oui' || $negociable == 'non');   
                              
-                    @$negociable = $_POST['negociable'] == 'on' ? 'oui' : 'non';
+                    
                     @$img_url = IMG_DEFAULT;
 
-                    if($fData && $valeursSet && ($negociable == 'oui' || $negociable == 'non')){                        
+                    if($fData && $valeursSet){                        
                         include "./include/funcValeurCorrecte.php";
                         include "./include/funcRemplirQueries.php";
 
-                        if(isset($_POST['image_url']))
-                            $img_url = $_POST['image_url'];
-
-                        if(!ValeurCorrecte(strlen(str_replace(' ', '', $_POST['titre'])), MIN_TITRE, MAX_TITRE)){
-                            $message .= 'titre invalide; sa longueur doit être entre 1 et 50 caractères';
-                            header('Location: '.$URL_BASE.
+                        if(isset($_FILES['couverture']) && $_FILES['couverture']['error'] === UPLOAD_ERR_OK && ($_FILES['couverture']['type'] != "image/jpeg" && 
+                        $_FILES['couverture']['type'] != "image/png")){
+                            $_SESSION['message'] ="format de l'image invalide; doit-être soit un .png ou .jpeg";    
+                            header("Location: ".$URL_BASE.
                                 RemplirQueries(
-                                    ['message', $message],
-                                    ['description',$_POST['description']],
-                                    ['prix',$_POST['prix']],
-                                    ['negociable',$_POST['negociable']],
-                                    ['image_url',$_POST['image_url']]
+                                    ['description', $_POST['description']],
+                                    ['prix', $_POST['prix']],
+                                    ['negociable', $_POST['negociable']],
+                                    ['titre', $_POST['titre']]
                                 )
                             );
+                            exit;
+                        }
+                        elseif(!ValeurCorrecte(strlen(str_replace(' ', '', $_POST['titre'])), MIN_TITRE, MAX_TITRE)){
+                            $_SESSION['message'] = 'titre invalide; sa longueur doit être entre 1 et 50 caractères';
+                            header('Location: '.$URL_BASE.
+                                RemplirQueries(
+                                    ['description', $_POST['description']],
+                                    ['prix', $_POST['prix']],
+                                    ['negociable', $_POST['negociable']]
+                                )
+                            );
+                            exit;
                         }
                         elseif(!ValeurCorrecte(strlen(str_replace(' ', '', $_POST['description'])), MIN_DESC, MAX_DESC)){
-                            $message .= 'description invalide; sa longueur doit être entre 10 et 500 caractères';
+                            $_SESSION['message'] = 'description invalide; sa longueur doit être entre 10 et 500 caractères';
                             header('Location: '.$URL_BASE.
                                 RemplirQueries(
-                                    ['message', $message],
                                     ['titre', $_POST['titre']], 
                                     ['prix',$_POST['prix']],
-                                    ['negociable',$_POST['negociable']],
-                                    ['image_url',$_POST['image_url']]
+                                    ['negociable',$_POST['negociable']]
                                 )
                             );
+                            exit;
                         }
                         elseif(!ValeurCorrecte($_POST['prix'], MIN_PRIX, MAX_PRIX)){
-                            $message .= "prix invalide; doit être entre 0 et 1'000'000";
+                            $_SESSION['message'] = "prix invalide; doit être entre 0 et 1'000'000";
                             header('Location: '.$URL_BASE.
                                 RemplirQueries(
-                                    ['message', $message],
                                     ['titre', $_POST['titre']], 
                                     ['description',$_POST['description']],
-                                    ['negociable',$_POST['negociable']],
-                                    ['image_url',$_POST['image_url']]
+                                    ['negociable',$_POST['negociable']]
                                 )
                             );
+                            exit;
                         }
                         elseif($negociable !== 'oui' && $negociable !== 'non'){
-                            $message .= 'negociable doit être inscrit';
+                            $_SESSION['message'] = 'negociable doit être inscrit';
                             header('Location: '.$URL_BASE.
                                 RemplirQueries(
-                                    ['message', $message],
                                     ['titre', $_POST['titre']], 
                                     ['description',$_POST['description']],
-                                    ['prix',$_POST['prix']],                                    
-                                    ['image_url',$_POST['image_url']]
+                                    ['prix',$_POST['prix']]
                                 )
-                            );                        
+                            ); 
+                            exit;                       
                         }               
                         elseif($fData){
-                            $erreurDebut = '';
-                            $message = '';
+                            unset($_SESSION['message']);
+
+                            $repertoire = './televersements/';
+                            $img_url = $repertoire . $_FILES['couverture']['name'];
+
+                            $moved = move_uploaded_file($_FILES['couverture']['tmp_name'], $img_url);
+
+                            if(!$moved){
+                                $message .= "l'image ne peut être téléversée; veuillez réessayer plus tard";
+                            }
+
                             fwrite($fData, $_POST['titre'].'|'.$_POST['description'].'|'.$_POST['prix'].'|'.$negociable.'|'.$img_url.'|'.$pseudo.'|'.$dateAjout."\n");
                         
                             include "./include/funcAfficherAnnonce.php";
@@ -123,9 +136,9 @@
         </div>
         <h2>Vendre</h2>
         <h3 class="erreur"><?=
-            $_GET['message']??''?></h3>
+            $_SESSION['message']??''?></h3>
         <fieldset class="fieldset" title="vendre">
-            <form class="form-perso" method="POST">
+            <form class="form-perso" method="POST" enctype="multipart/form-data">
                 <div class="form-ligne">
                     <label for="titre">titre</label>
                     <input id="titre" name="titre" value="<?= $_GET['titre'] ?? '' ?>"/>
@@ -143,8 +156,8 @@
                     <input type="checkbox" id="negociable" name="negociable" <?= (isset($_GET['negociable']) && $_GET['negociable'] === 'on') ? 'checked' : '' ?>/>
                 </div>
                 <div class="form-ligne">
-                    <label for="image_url">image (url)</label>
-                    <input type="url" id="image_url" name="image_url" value="<?= $_GET['image_url'] ?? '' ?>"/>
+                    <input type="hidden" name="MAX_FILE_SIZE" value="1000000">
+                    image: <input name="couverture" size="35" type="file">
                 </div>
                 <div class="form-ligne" style="height:64px">
                     <button type="submit" class="btn-imp" style="width:100%; font-size: 24px;">

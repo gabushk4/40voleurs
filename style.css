@@ -392,6 +392,9 @@ footer div{
 h1{
     color: var(--secondary);
 }
+h2{
+    color: var(--secondary);
+}
 .erreur{
     color:red
 
