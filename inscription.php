@@ -1,38 +1,31 @@
 <?php 
     include "./include/head.php";
     include "./include/nav.php";
+    include "./include/bd.php";
 
     $erreur = '';
     $succes = '';
 
     if($_SERVER['REQUEST_METHOD'] == "POST"){
-        include "./include/funcUtilisateurExiste.php";
         
         $pseudo = trim($_POST['pseudo']);
-        $mdp = trim($_POST['mdp']);   
-        
-        if(utilisateurExiste( fileStr: "./logins.csv", pseudo: $pseudo, mdp: $mdp)){
-            $erreur = "l'utilisateur $pseudo existe déjà, connectez-vous!";
+        $mdp = trim($_POST['mdp']);  
+        $nom = trim($_POST['nom']);
+        $prenom = trim($_POST['prenom']);
+        $courriel = trim($_POST['courriel']);
+        $id_usager = ajouter_usager($pseudo, $mdp, $nom, $prenom, $courriel);
+        if(isset($id_usager)){        
+            $succes = 'inscription réussie';
+            $_SESSION['connecteA40V'] = true;
+            $_SESSION['pseudo'] = $pseudo;
+            $_SESSION['id'] = $id_usager;
+            header("Location: index.php");
+            exit;
         }else{
-            $fLogins = fopen("./logins.csv", 'a');
-
-            if($fLogins && isset($pseudo) && isset($mdp)){
-                fwrite($fLogins, "$pseudo|$mdp\n");
-                $succes = 'inscription réussie';
-                $_SESSION['connecteA40V'] = true;
-                $_SESSION['pseudo'] = $pseudo;
-                header("Location: index.php");
-                fclose($fLogins);
-                exit;
-                
-            }
-            else{
-                $erreur="impossible de s'inscrire, veuillez réessayer plus tard";
-            }
-        }        
+            $erreur="impossible de s'inscrire, veuillez réessayer plus tard";
+        } 
     }
 ?>
-    </header>
     <main class="main-form">
         <h1>inscription</h1>
         <p class="succes"><?=$succes?></p>
@@ -45,6 +38,18 @@
                 <div class="form-ligne">
                     <label for="mdp">mot de passe</label>
                     <input name="mdp" id="mdp" type="password"/>
+                </div>
+                <div class="form-ligne">
+                    <label for="prenom">prenom</label>
+                    <input name="prenom" id="prenom" type="text"/>
+                </div>
+                <div class="form-ligne">
+                    <label for="nom">nom</label>
+                    <input name="nom" id="nom" type="text"/>
+                </div>
+                <div class="form-ligne">
+                    <label for="courriel">courriel</label>
+                    <input name="courriel" id="courriel" type="email"/>
                 </div>
                 <button class="btn-imp"  style="align-self: flex-end" type="submit">s'inscrire</button>
             </form>            

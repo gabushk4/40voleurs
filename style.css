@@ -58,7 +58,8 @@
 }
 
 html, body{
-    height: 100%;
+    height: auto;
+    min-height: 100%;
 }
 
 body{    
@@ -274,6 +275,7 @@ button:hover{
     overflow: hidden;
     background-color: black;
     color: var(--secondary);
+    position: relative;
 }
 .annonce-texte-conteneur{   
     padding: 0px 4px 4px 4px;
@@ -411,5 +413,18 @@ h2{
 }
 .connecte{
     color:var(--primary);
+}
+.btn-supprimer{
+    background-color: red;
+    position:absolute;
+    height: 32px;
+    width: 32px;
+    right: 8px;
+    top:8px
+}
+.btn-supprimer > img{
+    height: 90%;
+    width: 90%;
+    object-fit: contain;
 }
 

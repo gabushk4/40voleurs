@@ -9,17 +9,21 @@ function setCookie(name, value, days) {
 const dropdown = document.querySelector(".dropdown-content");
 
   function toggleDropdown() {
-  const parent = document.querySelector(".dropdown");
-  parent.classList.toggle("show");
+    const parent = document.querySelector(".dropdown");
+    parent.classList.toggle("show");
 
-  if (parent.classList.contains("show")) {
-    // ouverture
-    dropdown.style.height = dropdown.scrollHeight + "px";
-  } else {
-    // fermeture
-    dropdown.style.height = "0px";
+    if (parent.classList.contains("show")) {
+      // ouverture
+      dropdown.style.height = dropdown.scrollHeight + "px";
+    } else {
+      // fermeture
+      dropdown.style.height = "0px";
+    }
   }
-}
+
+  function selectCategorie(){
+    
+  }
 
 window.addEventListener("click", function(e) {
   if (!e.target.matches(".dropdown-button")) {

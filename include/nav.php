@@ -53,18 +53,28 @@
         }else if (isset($_SESSION['pseudo'])){
             $pseudo = $_SESSION['pseudo'];
             echo "
-            <form action='deconnexion.php'>
-                <div class='nav-I'>
-                    <p class='connecte'>bienvenue $pseudo</p>
+            <div class='nav-I'>                
+                <p class='connecte'>bienvenue $pseudo</p>
+                <form action='profil.php'>
+                <button type='submit' class='btn-normal'>
+                    <img
+                        src='./assets/profile.png' width='32' height='32' alt='photo_profil'
+                    />
+                </button>
+                </form>
+                <form action='deconnexion.php'>
                     <button class='btn-normal' type='submit'>
                         <img 
                             src='./assets/deconnexion.png' width='32' height='32' alt='deconnexion'
                         />
                     </button>
-                <div>
-            </form>
+                
+                </form>
+            <div>
             ";
         }
     ?>
             
 </nav>
+
+</header>
