@@ -14,8 +14,9 @@ function afficherAnnonce($annonce, $afficherPseudo=true) {
         ";
         if(!$afficherPseudo){
             echo "
-            <form >
-                <button class='btn-supprimer'>
+            <form method='POST'>
+                <input type='hidden' name='idArticle' value=".$annonce["id"].">
+                <button class='btn-supprimer' type='submit'>
                     <img
                         src='./assets/croix.png'
                     />

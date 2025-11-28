@@ -1,9 +1,30 @@
 <?php 
-include './include/head.php';
-include './include/nav.php';
-?>
+include_once './include/head.php';
+include_once './include/nav.php';
+include_once 'include/bd.php';
 
-<main class="vitrine">
+$method = $_SERVER['REQUEST_METHOD'];
+
+if($method == "GET"){
+    $_SESSION['message']="";
+}
+
+if($method == 'POST'){
+    if(isset($_POST['idArticle'])){
+        $idArticle = $_POST['idArticle'];
+        $supprime = supprimer_article($idArticle);
+        if(!$supprime){
+            $_SESSION['message']="impossible de supprimer l'article avec l'id $idArticle; veuilleuz réessayer plus tard";
+            
+        }
+    }
+    else{
+        $_SESSION['message'] = "impossible de trouver l'article; informations manquantes ou invalides";
+    }
+}
+?>
+<h3 class="erreur"><?=$_SESSION['message']?></h3>
+<main class="vitrine">    
         <?php
             include_once './include/funcAfficherAnnonce.php';
             include_once './include/bd.php';

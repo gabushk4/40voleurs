@@ -77,6 +77,19 @@ function obtenir_articles_usager($idUsager):mixed{
         return null;
     }
 }
+function supprimer_article($idArticle):bool{
+    $sql = "DELETE FROM article WHERE id = ?";
+
+    try{
+        $pdo = get_pdo();
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$idArticle]);
+        return true;
+    }catch(Exception $e){
+        echo "une erreur est survenue $e";
+        return false;
+    }
+}
 // ----------------------------------------------------------------------------
 // Ajoute un usager. Retourne true ou false pour indiquer le succès ou l'échec
 // de l'opération.

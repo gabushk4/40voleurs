@@ -18,11 +18,13 @@
                 const MAX_PSEUDO = 20;
                 const URL_BASE = 'http://142.44.247.33/~usager41/quarante_voleurs/vendre.php';
 
-                $message = '';
+                
                 $method = $_SERVER['REQUEST_METHOD'];
 
                 $categories = []; 
-
+                if($method == "GET"){
+                    //$_SESSION['message'] = " ";
+                }
                 if($method == "POST"){                                       
                     $dateAjout = date("Y-m-d H:i:s", time());
                     $pseudo = $_SESSION['pseudo'];
@@ -100,16 +102,16 @@
                             exit;                       
                         }               
                         else{
-                            unset($_SESSION['message']);
-
+                            
                             $repertoire = '/televersements';
                             $tmp_img = $_FILES['couverture']['tmp_name'];
 
                             $LARGEUR = 344;
 
                             $img = false;
+                            $typeImage = $_FILES['couverture']['type'];
 
-                            switch($_FILES['couverture']['type'])
+                            switch($typeImage)
                             {
                                 case 'image/jpeg':
                                     $img = imagecreatefromjpeg($tmp_img);
@@ -118,7 +120,7 @@
                                     $img = imagecreatefrompng($tmp_img);
                                     break;
                                 default:
-                                    $_SESSION['message'] .= 'une erreur inattendue sest passée au traitement de limage. Veuillez ressayer';
+                                    $_SESSION['message'] = "le type de l'image doit être soit png ou jpeg; type reçu: $typeImage";
                                     header("Location: ".$URL_BASE.
                                         RemplirQueries(
                                             ['description', $_POST['description']],
@@ -128,10 +130,11 @@
                                         )
                                     );
                                     exit;
+                                
                             }
 
                             if(!$img){
-                                $_SESSION['message'] .= 'une erreur sest passée au traitement de limage. Veuillez réessayer avec soit un png ou un jpeg';
+                                $_SESSION['message'] = "il fut impossible de traiter l'image; veuillez réessayer avec soit un png ou un jpeg";
                                 header("Location: ".$URL_BASE.
                                     RemplirQueries(
                                         ['description', $_POST['description']],
@@ -146,7 +149,7 @@
                             $img = imagescale($img, $LARGEUR);
 
                             if(!$img){
-                                $_SESSION['message'] .= 'une erreur inattendue sest passée au traitement de limage. Veuillez ressayer';
+                                $_SESSION['message'] = 'une erreur inattendue sest passée au traitement de limage. Veuillez ressayer';
                                 header("Location: ".$URL_BASE.
                                     RemplirQueries(
                                         ['description', $_POST['description']],
@@ -160,17 +163,21 @@
 
                             $img_name = $_FILES['couverture']['name'];
                             $img_url = "$repertoire/$img_name";
+                            $file = __DIR__ . $img_url;
 
-                            switch($_FILES['couverture']['type'])
+                            echo $file;
+
+                            switch($typeImage)
                             {
                                 case 'image/jpeg':
-                                    $img = imagejpeg($img, $img_url);
+                                    
+                                    $img = imagejpeg($img, $file);
                                     break;
                                 case 'image/png':
-                                    $img = imagepng($img, $img_url);
+                                    $img = imagepng($img, $file);
                                     break;
                                 default:
-                                    $_SESSION['message'] .= 'une erreur inattendue sest passée au traitement de limage. Veuillez ressayer';
+                                    $_SESSION['message'] = "le type de l'image doit être soit png ou jpeg; type reçu: $typeImage";
                                     header("Location: ".$URL_BASE.
                                         RemplirQueries(
                                             ['description', $_POST['description']],
@@ -183,7 +190,7 @@
                             }
 
                             if(!$img){
-                                $_SESSION['message'] .= 'une erreur inattendue sest passée au traitement de limage. Veuillez ressayer';
+                                $_SESSION['message'] = "impossible de sauvegarder l'image dans nos serveurs; veuillez réessayer";
                                 header("Location: ".$URL_BASE.
                                     RemplirQueries(
                                         ['description', $_POST['description']],
@@ -208,12 +215,13 @@
                                 "chemin_image"=>$img_url,
                                 "date_pub"=>$dateAjout,
                                 "id_usager"=>$id_usager
-                            ]);
+                            ], false);
                             echo "
                                 <div class='revenir-accueil'>
                                     <a href='./index.php' class='btn-imp'>revenir à l'accueil</a>
-                                </div>";
-                            
+                                </div>
+                            ";        
+                            $_SESSION['message']="";                    
                         }
                     }                  
                 }
@@ -232,7 +240,7 @@
                 </div>    
                 <div class="form-ligne">
                     <label for="description">description</label>
-                    <textarea id="description" name="description"> <?= isset($_GET['description']) ? str_replace('+', ' ', $_GET['description']) :'' ?></textarea>
+                    <textarea id="description" name="description"><?=isset($_GET['description'])?str_replace('+', ' ', $_GET['description']):'' ?></textarea>
                 </div>
                 <!-- <div class="form-ligne">
                     <label for="categories">categories</label>
