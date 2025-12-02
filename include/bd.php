@@ -107,7 +107,7 @@ function supprimer_article($idArticle):bool{
     }
 }
 /** 
-Ajoute un usager. Retourne true ou false pour indiquer le succès ou l'échec
+Ajoute un usager. Retourne le id de l'usager ou null pour indiquer le succès ou l'échec
 de l'opération.
 */
 function ajouter_usager($pseudo, $mdp, $nom, $prenom, $courriel){
@@ -120,7 +120,7 @@ function ajouter_usager($pseudo, $mdp, $nom, $prenom, $courriel){
         $stmt -> execute([$pseudo, $hash_mdp, $nom, $prenom, $courriel]);
         return $pdo->lastInsertId();
     }catch(Exception $e){
-        $retour = null;
+        return null;
     }
 }
 /**
@@ -128,7 +128,7 @@ Vérifie les informations d'un usager à la connexion. Retourne l'usager ou null
 pour indiquer le succès ou l'échec de l'opération.
 */
 function connecter_usager($pseudo, $mdp): mixed{
-    $sql = "SELECT mdp, id FROM usager WHERE pseudo = ?";
+    $sql = "SELECT mdp, id, courriel FROM usager WHERE pseudo = ?";
 
     try{
         $pdo = get_pdo();
@@ -213,4 +213,16 @@ function obtenir_titre_categorie($idCategorie){
         
     }
 }
+function confirmer_courriel($idUsager){
+    $sql = 'UPDATE usager SET email_confirme = 1 WHERE id = ?';
 
+    try{
+        $pdo = get_pdo();
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$idUsager]);
+        return $stmt->rowCount();
+    }catch(Exception $e){
+        //$_SESSION['message']=$e;
+        return null;
+    }
+}

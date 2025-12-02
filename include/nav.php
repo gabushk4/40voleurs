@@ -9,7 +9,7 @@
     
     $idCategorie = -1;
     if($method == "POST"){        
-        $idCategorie = $_POST['categorie']; 
+        $idCategorie = $_POST['categorie']??-1; 
     }
     include_once 'bd.php';
 ?>

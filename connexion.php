@@ -3,20 +3,21 @@
     include_once "./include/nav.php";
     include_once "./include/bd.php";
 
-    $erreur = '';
-    $succes = '';
+    $erreur = null;
+    $succes = null;
 
     if($_SERVER['REQUEST_METHOD'] == "POST"){
         $pseudo = trim($_POST['pseudo']);
         $mdp = trim($_POST['mdp']);        
 
         $usager = connecter_usager(pseudo: $pseudo, mdp: $mdp);
-        
+
         if(count($usager) > 0){    
             $_SESSION['connecteA40V'] = true;
             $_SESSION['pseudo'] = $pseudo;
             $_SESSION['id'] = $usager['id'];
             $_SESSION['email_confirme'] = $usager['email_confirme'];
+            $_SESSION['courriel'] = $usager['courriel'];
             header("Location: index.php");
             exit;             
         }else{
@@ -40,7 +41,7 @@
                 <button class="btn-imp" style="align-self: flex-end" type="submit">se connecter</button>
             </form>            
         </fieldset>
-        <p class="erreur"><?=$erreur?></p>
+        <p class="erreur"><?=$erreur??$_SESSION['message']?></p>
     </main>
 <?php
     include "./include/footer.php"

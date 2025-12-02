@@ -2,6 +2,7 @@
     include_once "./include/head.php";
     include_once "./include/nav.php";
     include_once "./include/bd.php";
+    include_once "./include/courriel.php";
 
     $erreur = '';
     $succes = '';
@@ -19,6 +20,7 @@
             $_SESSION['connecteA40V'] = true;
             $_SESSION['pseudo'] = $pseudo;
             $_SESSION['id'] = $id_usager;
+            envoyer_courriel_confirmation($courriel, $id_usager);
             header("Location: index.php");
             exit;
         }else{

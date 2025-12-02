@@ -1,11 +1,15 @@
 <?php include "./include/head.php"?>
     <div class="header-image"></div>
-    <?php include "./include/nav.php" ?>
+    <?php include "./include/nav.php";
+        
+        if(!$_SESSION['email_confirme']){
+            include_once './include/message_demande_conf.php';
+        }
+    ?>
     <main class="vitrine">
         <?php
             include_once './include/funcAfficherAnnonce.php';
             include_once './include/bd.php';
-
             // lire toutes les lignes dans un tableau
             try{
                 $articles = obtenir_articles($idCategorie);

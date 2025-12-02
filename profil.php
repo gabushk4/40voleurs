@@ -23,50 +23,49 @@ if($method == 'POST'){
 }
 ?>
 <h3 class="erreur"><?=$_SESSION['message']?></h3>
-<form class="demande-conf">
-    <p>Tu dois confirmer ton courriel</p>
-    <div style="width:200px;height:32px">
-        <button class="btn-normal" href="">cliques ici pour confirmer</button>
-    </div>
-   
-</form>
-<main class="vitrine">    
+<?php 
+
+    if(!$_SESSION['email_confirme']){
+        include_once './include/message_demande_conf.php';
+    }  
+    include_once './include/funcAfficherAnnonce.php';
+    include_once './include/bd.php';
+
+    // lire toutes les lignes dans un tableau
+    $idUsager = $_SESSION['id'];        
+
+    if(isset($idUsager)){
+        try{
+            $articles = obtenir_articles_usager($idUsager);
+        }catch(Exception $e){
+        
+            echo <<<FIN
+                Votre commande ne peut être traitée<br>
+                Veuillez S.V.P. essayer plus tard
+                ($e)
+            FIN;
+            exit(1); // termine immédiatement le programme
+        }
+    }else{
+        echo "
+            <h3 class='erreur'>Il faut croire que vos informations ne son pas inscrite dans le cookies. Les avez-vous activé?</h3>
+        ";
+    }
+    ?>
+    <?php if(count($articles) > 0):?>
+    <main class="vitrine">  
         <?php
-            include_once './include/funcAfficherAnnonce.php';
-            include_once './include/bd.php';
-
-            // lire toutes les lignes dans un tableau
-            $idUsager = $_SESSION['id'];
-            
-
-            if(isset($idUsager)){
-                try{
-                    $articles = obtenir_articles_usager($idUsager);
-                    if(count($articles) > 0){
-                        foreach ($articles as $article){
-                            afficherAnnonce($article, false);            
-                        }
-                    }
-                    else{
-                        echo "C'est vide ici";
-                    }
-                }catch(Exception $e){
-                
-                    echo <<<FIN
-                        Votre commande ne peut être traitée<br>
-                        Veuillez S.V.P. essayer plus tard
-                        ($e)
-                    FIN;
-                    exit(1); // termine immédiatement le programme
-                }
-            }else{
-                echo "
-                    <h3 class='erreur'>Il faut croire que vos informations ne son pas isncrite dans le cookies. Les avez-vous activé?</h3>
-                ";
+            foreach ($articles as $article){
+                afficherAnnonce($article, false);            
             }
         ?>
     </main>
+    <?php else: ?>
+        <main>
+            <a href='vendre.php'>vendre</a>
+        </main>
+    <?php 
+        endif;
 
-<?php
-include './include/footer.php';
-?>
+        include './include/footer.php';
+    ?>

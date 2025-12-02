@@ -15,18 +15,17 @@
     const MAX_PSEUDO = 20;
     const URL_BASE = 'http://142.44.247.33/~usager41/quarante_voleurs/vendre.php';
     $emailConfirme = $_SESSION['email_confirme'];
-?>
-   <?php if($emailConfirme): ?>
+    
+    if($emailConfirme): ?>
     <main class="main-form">
         <div class="historique-vendre">
             <?php   
                 $method = $_SERVER['REQUEST_METHOD'];
                 
-                $categories = []; 
                 if($method == "GET"){
-                    //$_SESSION['message'] = " ";
+                    
                 }
-                if($method == "POST"){                                       
+                if($method == "POST"){                                    
                     $dateAjout = date("Y-m-d H:i:s", time());
                     $pseudo = $_SESSION['pseudo'];
                     $id_usager = $_SESSION['id'];
@@ -47,7 +46,7 @@
 
                         if(isset($_FILES['couverture']) && $_FILES['couverture']['error'] === UPLOAD_ERR_OK && ($_FILES['couverture']['type'] != "image/jpeg" && 
                             $_FILES['couverture']['type'] != "image/png")){
-                            $_SESSION['message'] ="format de l'image invalide; doit-être soit un .png ou .jpeg";    
+                            $_SESSION['erreur_vendre'] ="format de l'image invalide; doit-être soit un .png ou .jpeg";    
                             header("Location: ".$URL_BASE.
                                 RemplirQueries(
                                     ['description', $_POST['description']],
@@ -59,7 +58,7 @@
                             exit;
                         }
                         elseif(!ValeurCorrecte(strlen(str_replace(' ', '', $_POST['titre'])), MIN_TITRE, MAX_TITRE)){
-                            $_SESSION['message'] = 'titre invalide; sa longueur doit être entre 1 et 50 caractères';
+                            $_SESSION['erreur_vendre'] = 'titre invalide; sa longueur doit être entre 1 et 50 caractères';
                             header('Location: '.$URL_BASE.
                                 RemplirQueries(
                                     ['description', $_POST['description']],
@@ -70,7 +69,7 @@
                             exit;
                         }
                         elseif(!ValeurCorrecte(strlen(str_replace(' ', '', $_POST['description'])), MIN_DESC, MAX_DESC)){
-                            $_SESSION['message'] = 'description invalide; sa longueur doit être entre 10 et 500 caractères';
+                            $_SESSION['erreur_vendre'] = 'description invalide; sa longueur doit être entre 10 et 500 caractères';
                             header('Location: '.$URL_BASE.
                                 RemplirQueries(
                                     ['titre', $_POST['titre']], 
@@ -81,7 +80,7 @@
                             exit;
                         }
                         elseif(!ValeurCorrecte($_POST['prix'], MIN_PRIX, MAX_PRIX)){
-                            $_SESSION['message'] = "prix invalide; doit être entre 0 et 1'000'000";
+                            $_SESSION['erreur_vendre'] = "prix invalide; doit être entre 0 et 1'000'000";
                             header('Location: '.$URL_BASE.
                                 RemplirQueries(
                                     ['titre', $_POST['titre']], 
@@ -92,7 +91,7 @@
                             exit;
                         }
                         elseif($negociable !== 1 && $negociable !== 0){
-                            $_SESSION['message'] = 'negociable doit être inscrit';
+                            $_SESSION['erreur_vendre'] = 'negociable doit être inscrit';
                             header('Location: '.$URL_BASE.
                                 RemplirQueries(
                                     ['titre', $_POST['titre']], 
@@ -121,7 +120,7 @@
                                     $img = imagecreatefrompng($tmp_img);
                                     break;
                                 default:
-                                    $_SESSION['message'] = "le type de l'image doit être soit png ou jpeg; type reçu: $typeImage";
+                                    $_SESSION['erreur_vendre'] = "le type de l'image doit être soit png ou jpeg; type reçu: $typeImage";
                                     header("Location: ".$URL_BASE.
                                         RemplirQueries(
                                             ['description', $_POST['description']],
@@ -135,7 +134,7 @@
                             }
 
                             if(!$img){
-                                $_SESSION['message'] = "il fut impossible de traiter l'image; veuillez réessayer avec soit un png ou un jpeg";
+                                $_SESSION['erreur_vendre'] = "il fut impossible de traiter l'image; veuillez réessayer avec soit un png ou un jpeg";
                                 header("Location: ".$URL_BASE.
                                     RemplirQueries(
                                         ['description', $_POST['description']],
@@ -150,7 +149,7 @@
                             $img = imagescale($img, $LARGEUR);
 
                             if(!$img){
-                                $_SESSION['message'] = 'une erreur inattendue sest passée au traitement de limage. Veuillez ressayer';
+                                $_SESSION['erreur_vendre'] = 'une erreur inattendue sest passée au traitement de limage. Veuillez ressayer';
                                 header("Location: ".$URL_BASE.
                                     RemplirQueries(
                                         ['description', $_POST['description']],
@@ -176,7 +175,7 @@
                                     $img = imagepng($img, $file);
                                     break;
                                 default:
-                                    $_SESSION['message'] = "le type de l'image doit être soit png ou jpeg; type reçu: $typeImage";
+                                    $_SESSION['erreur_vendre'] = "le type de l'image doit être soit png ou jpeg; type reçu: $typeImage";
                                     header("Location: ".$URL_BASE.
                                         RemplirQueries(
                                             ['description', $_POST['description']],
@@ -189,7 +188,7 @@
                             }
 
                             if(!$img){
-                                $_SESSION['message'] = "impossible de sauvegarder l'image dans nos serveurs; veuillez réessayer";
+                                $_SESSION['erreur_vendre'] = "impossible de sauvegarder l'image dans nos serveurs; veuillez réessayer";
                                 header("Location: ".$URL_BASE.
                                     RemplirQueries(
                                         ['description', $_POST['description']],
@@ -200,9 +199,9 @@
                                 );
                                 exit;
                             }
-
+                            $idCategorie = $_POST['categorie'];
                             
-                            ajouter_article(1, $id_usager, trim($_POST['titre']), trim($_POST['description']), $_POST['prix'], $negociable, $img_url, $dateAjout);
+                            ajouter_article($idCategorie, $id_usager, trim($_POST['titre']), trim($_POST['description']), $_POST['prix'], $negociable, $img_url, $dateAjout);
 
                             include_once "./include/funcAfficherAnnonce.php";
                         
@@ -219,16 +218,16 @@
                                 <div class='revenir-accueil'>
                                     <a href='./index.php' class='btn-imp'>revenir à l'accueil</a>
                                 </div>
-                            ";        
-                            $_SESSION['message']="";                    
+                            ";  
+                            $_SESSION['erreur_vendre'] = '';                        
                         }
                     }                  
                 }                
             ?>
         </div>
         <h2>Vendre</h2>
-        <h3 class="erreur"><?=
-            $_SESSION['message']??''?>
+        <h3 class="erreur">
+            <?=$_SESSION['erreur_vendre']?>
         </h3>
         
         <fieldset class="fieldset" title="vendre">
@@ -243,8 +242,7 @@
                 </div>
                 <div class="form-ligne">
                     <label for="categories">categories</label>
-                    <select name="categories" id="categories">
-                        <option value="0">toutes</option>
+                    <select name="categorie" id="categories">
                         <?php
                             $stmt = obtenir_categories();
                             if(isset($stmt)){                                
@@ -278,12 +276,9 @@
     </main>
     <?php else:?>
         <main>
-        <form class="demande-conf" action="">
-            <p>Tu dois confirmer ton courriel pour vendre de quoi</p>
-            <div style="width:200px;height:32px">
-                <button class="btn-normal" href="">cliques ici pour confirmer</button>
-            </div>        
-        </form>
+        <?php            
+            include_once './include/message_demande_conf.php';
+        ?>
         </main>
     <?php endif ?>
     <?php include "./include/footer.php"?>
