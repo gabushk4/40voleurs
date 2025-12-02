@@ -22,10 +22,10 @@ function get_pdo(){
     }
 }
 
-// ----------------------------------------------------------------------------
-// Ajoute un article. Retourne true ou false pour indiquer le succès ou l'échec
-// de l'opération.
-// ----------------------------------------------------------------------------
+/**
+Ajoute un article. Retourne true ou false pour indiquer le succès ou l'échec
+de l'opération.
+*/
 function ajouter_article($categorie, $usager, $titre, $description, $prix,
     $negociable, $chemin, $date) {
 
@@ -48,12 +48,18 @@ function ajouter_article($categorie, $usager, $titre, $description, $prix,
 
     return $retour;
 }
-// ----------------------------------------------------------------------------
-// Retourne une liste d'articles. Retourne false pour indiquer l'échec
-// de l'opération.
-// ----------------------------------------------------------------------------
-function obtenir_articles():mixed{
-    $sql = "SELECT * FROM article ORDER BY date_pub DESC";
+/**
+Retourne une liste d'articles. Retourne false pour indiquer l'échec
+de l'opération.
+*/
+function obtenir_articles($categorie = -1, $offset = 0):mixed{
+    $limit = 10;
+    $offset *= $limit;
+
+    if($categorie < 0)
+        $sql = "SELECT * FROM article ORDER BY date_pub DESC LIMIT $limit OFFSET $offset";
+    else
+        $sql = $sql = "SELECT * FROM article WHERE id_categorie = $categorie ORDER BY date_pub DESC LIMIT $limit OFFSET $offset";
 
     try{
         $pdo = get_pdo();        
@@ -64,6 +70,11 @@ function obtenir_articles():mixed{
         return null;
     }
 }
+/**
+ * Obtiens les articles d'un usager
+ * @param int $idUsager 
+ * @return array|null Retourne le stmt  si ca a marché
+ */
 function obtenir_articles_usager($idUsager):mixed{
     $sql = "SELECT * FROM article WHERE id_usager = ? ORDER BY date_pub DESC";
 
@@ -71,12 +82,17 @@ function obtenir_articles_usager($idUsager):mixed{
         $pdo = get_pdo();
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$idUsager]);
-        return $stmt;
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }catch(Exception $e){
         echo "une erreur est survenue $e";
         return null;
     }
 }
+/**
+ * Permet de supprimer un article 
+ * @param mixed $idArticle
+ * @return bool true si ca a marché
+ */
 function supprimer_article($idArticle):bool{
     $sql = "DELETE FROM article WHERE id = ?";
 
@@ -90,10 +106,10 @@ function supprimer_article($idArticle):bool{
         return false;
     }
 }
-// ----------------------------------------------------------------------------
-// Ajoute un usager. Retourne true ou false pour indiquer le succès ou l'échec
-// de l'opération.
-// ----------------------------------------------------------------------------
+/** 
+Ajoute un usager. Retourne true ou false pour indiquer le succès ou l'échec
+de l'opération.
+*/
 function ajouter_usager($pseudo, $mdp, $nom, $prenom, $courriel){
     $sql = "INSERT INTO usager (pseudo, mdp, nom, prenom, courriel) VALUES (?, ?, ?, ?, ?)";
 
@@ -107,10 +123,10 @@ function ajouter_usager($pseudo, $mdp, $nom, $prenom, $courriel){
         $retour = null;
     }
 }
-// ----------------------------------------------------------------------------
-// Vérifie les informations d'un usager à la connexion. Retourne true ou false 
-// pour indiquer le succès ou l'échec de l'opération.
-// ----------------------------------------------------------------------------
+/**
+Vérifie les informations d'un usager à la connexion. Retourne l'usager ou null 
+pour indiquer le succès ou l'échec de l'opération.
+*/
 function connecter_usager($pseudo, $mdp): mixed{
     $sql = "SELECT mdp, id FROM usager WHERE pseudo = ?";
 
@@ -120,17 +136,16 @@ function connecter_usager($pseudo, $mdp): mixed{
         $stmt->execute([$pseudo]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if($row){
-            
+        if($row){            
             $hash = $row['mdp'];
 
-            $id_usager = $row['id'];
+            $usager = $row;
 
-            if(!isset($hash, $id_usager) || !password_verify($mdp, $hash)){
+            if(!isset($hash) || !password_verify($mdp, $hash)){
                 return null;
             }
             
-            return $id_usager;
+            return $usager;
         }else{
             return null;
         }
@@ -139,7 +154,11 @@ function connecter_usager($pseudo, $mdp): mixed{
         return null;
     }
 }
-
+/**
+ * Obtient le pseudo d'un usager avec son id
+ * @param int $id_usager
+ * @return string|null retourne null si loperation echoue
+ */
 function obtenir_pseudo($id_usager){
     $sql = "SELECT pseudo FROM usager WHERE id = ?";
 
@@ -157,8 +176,41 @@ function obtenir_pseudo($id_usager){
 
         return $pseudo;
     }catch(Exception $e){
-
+        echo "erreur de connexion $e";
         return null;
+    }
+}
+/**
+ * obtient toutes les catégories 
+ * @return PDOStatement|null Retourne null si l'operation echoue
+ */
+function obtenir_categories(){
+    $sql = "SELECT * FROM categorie";
+
+    try{
+        $pdo = get_pdo();
+        $stmt = $pdo->query($sql);
+        echo var_dump($stmt);
+        return $stmt;
+    }catch(Exception $e){
+        echo "erreur de connexion $e";
+        exit;
+        
+    }
+}
+
+function obtenir_titre_categorie($idCategorie){
+    $sql = "SELECT titre FROM categorie WHERE id = ?";
+
+    try{
+        $pdo = get_pdo();
+        $stmt = $pdo->query($sql);
+        echo var_dump($stmt);
+        return $stmt;
+    }catch(Exception $e){
+        echo "erreur de connexion $e";
+        exit;
+        
     }
 }
 

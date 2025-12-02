@@ -1,7 +1,7 @@
 <?php 
-    include "./include/head.php";
-    include "./include/nav.php";
-    include "./include/bd.php";
+    include_once "./include/head.php";
+    include_once "./include/nav.php";
+    include_once "./include/bd.php";
 
     $erreur = '';
     $succes = '';
@@ -10,12 +10,13 @@
         $pseudo = trim($_POST['pseudo']);
         $mdp = trim($_POST['mdp']);        
 
-        $id_usager = connecter_usager(pseudo: $pseudo, mdp: $mdp);
-        echo "id usager $id_usager";
-        if(isset($id_usager)){    
+        $usager = connecter_usager(pseudo: $pseudo, mdp: $mdp);
+        
+        if(count($usager) > 0){    
             $_SESSION['connecteA40V'] = true;
             $_SESSION['pseudo'] = $pseudo;
-            $_SESSION['id'] = $id_usager;
+            $_SESSION['id'] = $usager['id'];
+            $_SESSION['email_confirme'] = $usager['email_confirme'];
             header("Location: index.php");
             exit;             
         }else{

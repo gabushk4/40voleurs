@@ -8,7 +8,7 @@
 
             // lire toutes les lignes dans un tableau
             try{
-                $articles = obtenir_articles();
+                $articles = obtenir_articles($idCategorie);
                 if(isset($articles)){
                     foreach ($articles as $article){
                         afficherAnnonce($article);            

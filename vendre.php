@@ -2,25 +2,26 @@
 <?php 
     include "./include/head.php";
     include "./include/nav.php";
+    include_once './include/bd.php';
+
+    const MIN_TITRE = 1;
+    const MAX_TITRE = 50;
+    const MIN_DESC = 10;
+    const MAX_DESC = 500;
+    const MIN_PRIX = 0;
+    const MAX_PRIX = 1000000;
+    const IMG_DEFAULT = './assets/brand.png';
+    const MIN_PSEUDO = 2;
+    const MAX_PSEUDO = 20;
+    const URL_BASE = 'http://142.44.247.33/~usager41/quarante_voleurs/vendre.php';
+    $emailConfirme = $_SESSION['email_confirme'];
 ?>
-   
+   <?php if($emailConfirme): ?>
     <main class="main-form">
         <div class="historique-vendre">
-            <?php 
-                const MIN_TITRE = 1;
-                const MAX_TITRE = 50;
-                const MIN_DESC = 10;
-                const MAX_DESC = 500;
-                const MIN_PRIX = 0;
-                const MAX_PRIX = 1000000;
-                const IMG_DEFAULT = './assets/brand.png';
-                const MIN_PSEUDO = 2;
-                const MAX_PSEUDO = 20;
-                const URL_BASE = 'http://142.44.247.33/~usager41/quarante_voleurs/vendre.php';
-
-                
+            <?php   
                 $method = $_SERVER['REQUEST_METHOD'];
-
+                
                 $categories = []; 
                 if($method == "GET"){
                     //$_SESSION['message'] = " ";
@@ -165,8 +166,6 @@
                             $img_url = "$repertoire/$img_name";
                             $file = __DIR__ . $img_url;
 
-                            echo $file;
-
                             switch($typeImage)
                             {
                                 case 'image/jpeg':
@@ -202,7 +201,7 @@
                                 exit;
                             }
 
-                            include_once './include/bd.php';
+                            
                             ajouter_article(1, $id_usager, trim($_POST['titre']), trim($_POST['description']), $_POST['prix'], $negociable, $img_url, $dateAjout);
 
                             include_once "./include/funcAfficherAnnonce.php";
@@ -215,7 +214,7 @@
                                 "chemin_image"=>$img_url,
                                 "date_pub"=>$dateAjout,
                                 "id_usager"=>$id_usager
-                            ], false);
+                            ]);
                             echo "
                                 <div class='revenir-accueil'>
                                     <a href='./index.php' class='btn-imp'>revenir à l'accueil</a>
@@ -224,42 +223,46 @@
                             $_SESSION['message']="";                    
                         }
                     }                  
-                }
-                
+                }                
             ?>
         </div>
         <h2>Vendre</h2>
         <h3 class="erreur"><?=
             $_SESSION['message']??''?>
         </h3>
+        
         <fieldset class="fieldset" title="vendre">
             <form class="form-perso" method="POST" enctype="multipart/form-data">
                 <div class="form-ligne">
                     <label for="titre">titre</label>
-                    <input id="titre" name="titre" value="<?= $_GET['titre'] ?? '' ?>"/>
+                    <input id="titre" name="titre" value="<?=$_GET['titre'] ?? '' ?>"/>
                 </div>    
                 <div class="form-ligne">
                     <label for="description">description</label>
                     <textarea id="description" name="description"><?=isset($_GET['description'])?str_replace('+', ' ', $_GET['description']):'' ?></textarea>
                 </div>
-                <!-- <div class="form-ligne">
+                <div class="form-ligne">
                     <label for="categories">categories</label>
-                    <li id="categories" class="dropdown">
-                        <a class="dropdown-button" onclick="toggleDropdown()">catégories ▼</a>
-                        <ul class="dropdown-content" id="menuDropdown">                    
-                            <li><a href="#">meubles</a></li>
-                            <li><a href="#">appareils électroniques</a></li>
-                            <li><a href="#">vêtements</a></li>
-                        </ul>
-                    </li>
-                </div> -->
+                    <select name="categories" id="categories">
+                        <option value="0">toutes</option>
+                        <?php
+                            $stmt = obtenir_categories();
+                            if(isset($stmt)){                                
+                                foreach($stmt as $row){
+                                    echo "<option value='".$row['id']."' >".$row['titre']."</option>";
+                                }
+                            }else
+                                echo "<option value='6'>divers</option>";
+                        ?>
+                    </select>
+                </div>
                 <div class="form-ligne">
                     <label for="prix">prix ($)</label>
-                        <input id="prix" name="prix" type="number" placeholder="0 - 1'000'000" value="<?= $_GET['prix'] ?? '' ?>"/>
+                    <input id="prix" name="prix" type="number" placeholder="0 - 1'000'000" value="<?=$_GET['prix']??''?>"/>
                 </div>
                 <div class="form-ligne">
                     <label for="negociable">négociable?</label>
-                    <input type="checkbox" id="negociable" name="negociable" <?= (isset($_GET['negociable']) && $_GET['negociable'] === 'on') ? 'checked' : '' ?>/>
+                    <input type="checkbox" id="negociable" name="negociable" <?=(isset($_GET['negociable']) && $_GET['negociable'] === 'on') ? 'checked' : '' ?>/>
                 </div>
                 <div class="form-ligne">
                     <input type="hidden" name="MAX_FILE_SIZE" value="1000000">
@@ -273,4 +276,14 @@
             </form>
         </fieldset>
     </main>
+    <?php else:?>
+        <main>
+        <form class="demande-conf" action="">
+            <p>Tu dois confirmer ton courriel pour vendre de quoi</p>
+            <div style="width:200px;height:32px">
+                <button class="btn-normal" href="">cliques ici pour confirmer</button>
+            </div>        
+        </form>
+        </main>
+    <?php endif ?>
     <?php include "./include/footer.php"?>

@@ -5,6 +5,13 @@
     if(isset($_SESSION['connecteA40V'])){
         $connecte = true;
     }
+    $method = $_SERVER['REQUEST_METHOD'];
+    
+    $idCategorie = -1;
+    if($method == "POST"){        
+        $idCategorie = $_POST['categorie']; 
+    }
+    include_once 'bd.php';
 ?>
 
 <nav class="nav-custom">
@@ -27,14 +34,21 @@
                 echo "<a href='./vendre.php'>vendre</a>";
             ?>
         </li>
-        <li class="dropdown">
-            <a class="dropdown-button" onclick="toggleDropdown()">catégories ▼</a>
-            <ul class="dropdown-content" id="menuDropdown">                    
-                <li><a href="#">meubles</a></li>
-                <li><a href="#">appareils électroniques</a></li>
-                <li><a href="#">vêtements</a></li>
-            </ul>
-        </li>
+        <form method="POST">
+            <select class="dropdown-button" name="categorie" onchange="this.form.submit()">
+                <option value="-1">toutes</option>
+                <?php
+                    $stmt = obtenir_categories();
+                    if(isset($stmt)){                                
+                        foreach($stmt as $row){
+                            $selectionne = $row['id'] == $idCategorie;
+                            echo "<option value='".$row['id']."' ".($selectionne?'selected':'').">".$row['titre']."</option>";
+                        }
+                    }else
+                        echo "<option value='6'>autres</option>";
+                ?>
+            </select>
+        </form>
         <li>
             <a href="#">à propos</a>
         </li>

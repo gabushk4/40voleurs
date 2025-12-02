@@ -12,8 +12,7 @@ if($method == "GET"){
 if($method == 'POST'){
     if(isset($_POST['idArticle'])){
         $idArticle = $_POST['idArticle'];
-        $supprime = supprimer_article($idArticle);
-        if(!$supprime){
+        if(!supprimer_article($idArticle)){
             $_SESSION['message']="impossible de supprimer l'article avec l'id $idArticle; veuilleuz réessayer plus tard";
             
         }
@@ -24,6 +23,13 @@ if($method == 'POST'){
 }
 ?>
 <h3 class="erreur"><?=$_SESSION['message']?></h3>
+<form class="demande-conf">
+    <p>Tu dois confirmer ton courriel</p>
+    <div style="width:200px;height:32px">
+        <button class="btn-normal" href="">cliques ici pour confirmer</button>
+    </div>
+   
+</form>
 <main class="vitrine">    
         <?php
             include_once './include/funcAfficherAnnonce.php';
@@ -31,11 +37,12 @@ if($method == 'POST'){
 
             // lire toutes les lignes dans un tableau
             $idUsager = $_SESSION['id'];
+            
 
             if(isset($idUsager)){
                 try{
                     $articles = obtenir_articles_usager($idUsager);
-                    if(isset($articles)){
+                    if(count($articles) > 0){
                         foreach ($articles as $article){
                             afficherAnnonce($article, false);            
                         }

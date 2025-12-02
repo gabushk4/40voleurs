@@ -1,7 +1,7 @@
 <?php 
-    include "./include/head.php";
-    include "./include/nav.php";
-    include "./include/bd.php";
+    include_once "./include/head.php";
+    include_once "./include/nav.php";
+    include_once "./include/bd.php";
 
     $erreur = '';
     $succes = '';
@@ -51,7 +51,7 @@
                     <label for="courriel">courriel</label>
                     <input name="courriel" id="courriel" type="email"/>
                 </div>
-                <button class="btn-imp"  style="align-self: flex-end" type="submit">s'inscrire</button>
+                <button class="btn-imp"  style="align-self: flex-end;height:32px; width: 100%;" type="submit">s'inscrire</button>
             </form>            
         </fieldset>
         <p class="erreur"><?=$erreur?></p>
