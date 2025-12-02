@@ -8,24 +8,31 @@
     $succes = '';
 
     if($_SERVER['REQUEST_METHOD'] == "POST"){
-        
+        $mdp = trim($_POST['mdp']);
+        $mdp_conf = trim($_POST['mdp_conf']);
         $pseudo = trim($_POST['pseudo']);
-        $mdp = trim($_POST['mdp']);  
         $nom = trim($_POST['nom']);
         $prenom = trim($_POST['prenom']);
         $courriel = trim($_POST['courriel']);
-        $id_usager = ajouter_usager($pseudo, $mdp, $nom, $prenom, $courriel);
-        if(isset($id_usager)){        
-            $succes = 'inscription réussie';
-            $_SESSION['connecteA40V'] = true;
-            $_SESSION['pseudo'] = $pseudo;
-            $_SESSION['id'] = $id_usager;
-            envoyer_courriel_confirmation($courriel, $id_usager);
-            header("Location: index.php");
-            exit;
+        
+        if($mdp != $mdp_conf){
+            $erreur = 'les mots de passes ne correspondent pas';
         }else{
-            $erreur="impossible de s'inscrire, veuillez réessayer plus tard";
-        } 
+            
+            $id_usager = ajouter_usager($pseudo, $mdp, $nom, $prenom, $courriel);
+            if(isset($id_usager)){        
+                $succes = 'inscription réussie';
+                $_SESSION['connecteA40V'] = true;
+                $_SESSION['pseudo'] = $pseudo;
+                $_SESSION['id'] = $id_usager;
+                $_SESSION['email_confirme'] = false;
+                envoyer_courriel_confirmation($courriel, $id_usager);
+                header("Location: index.php");
+                exit;
+            }else{
+                $erreur="impossible de s'inscrire, veuillez réessayer plus tard";
+            } 
+        }
     }
 ?>
     <main class="main-form">
@@ -35,23 +42,27 @@
             <form class="form-perso" method="post">
                 <div class="form-ligne">
                     <label for="pseudo">pseudonyme</label>
-                    <input name="pseudo" id="pseudo"/>
+                    <input name="pseudo" id="pseudo" value="<?=$pseudo??''?>"/>
                 </div>
                 <div class="form-ligne">
                     <label for="mdp">mot de passe</label>
                     <input name="mdp" id="mdp" type="password"/>
                 </div>
                 <div class="form-ligne">
+                    <label for="mdp_conf">confirmation</label>
+                    <input name="mdp_conf" id="mdp_conf" type="password"/>
+                </div>
+                <div class="form-ligne">
                     <label for="prenom">prenom</label>
-                    <input name="prenom" id="prenom" type="text"/>
+                    <input name="prenom" id="prenom" type="text" value="<?=$prenom??''?>"/>
                 </div>
                 <div class="form-ligne">
                     <label for="nom">nom</label>
-                    <input name="nom" id="nom" type="text"/>
+                    <input name="nom" id="nom" type="text" value="<?=$nom??''?>"/>
                 </div>
                 <div class="form-ligne">
                     <label for="courriel">courriel</label>
-                    <input name="courriel" id="courriel" type="email"/>
+                    <input name="courriel" id="courriel" type="email" value="<?=$courriel??''?>"/>
                 </div>
                 <button class="btn-imp"  style="align-self: flex-end;height:32px; width: 100%;" type="submit">s'inscrire</button>
             </form>            

@@ -353,6 +353,7 @@ footer div{
 }
 .form-perso{
     margin-top: 16px;
+    padding:8px 0px;
 }
 .form-ligne{
     display: flex;

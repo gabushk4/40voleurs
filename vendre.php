@@ -227,7 +227,7 @@
         </div>
         <h2>Vendre</h2>
         <h3 class="erreur">
-            <?=$_SESSION['erreur_vendre']?>
+            <?=$_SESSION['erreur_vendre']??''?>
         </h3>
         
         <fieldset class="fieldset" title="vendre">

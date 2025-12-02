@@ -38,10 +38,11 @@
                     <label for="mdp">mot de passe</label>
                     <input name="mdp" id="mdp" type="password"/>
                 </div>
+                
                 <button class="btn-imp" style="align-self: flex-end" type="submit">se connecter</button>
             </form>            
         </fieldset>
-        <p class="erreur"><?=$erreur??$_SESSION['message']?></p>
+        <p class="erreur"><?=$erreur??$_SESSION['message']??''?></p>
     </main>
 <?php
     include "./include/footer.php"

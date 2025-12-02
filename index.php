@@ -2,7 +2,7 @@
     <div class="header-image"></div>
     <?php include "./include/nav.php";
         
-        if(!$_SESSION['email_confirme']){
+        if(isset($_SESSION['email_confirme'])&&!$_SESSION['email_confirme']){
             include_once './include/message_demande_conf.php';
         }
     ?>
