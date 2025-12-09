@@ -2,26 +2,55 @@
 include_once './include/head.php';
 include_once './include/nav.php';
 include_once 'include/bd.php';
+include_once 'include/funcValeurCorrecte.php';
 
 $method = $_SERVER['REQUEST_METHOD'];
+$erreur = null;
+$succes = null;
+$idUsager = $_SESSION['id'];
 
 if($method == "GET"){
     $_SESSION['message']="";
 }
+if($method == "POST"){
+    $valide = true;
+    $prenom = $_POST["prenom"];
+    $nom = $_POST["nom"];
+    $courriel = $_POST["courriel"];
 
+    if(!ValeurCorrecte(strlen($prenom), 2, 50)){
+        $valide = false;
+        $erreur = "le prenom doit être entre 2 et 50 caractères";
+    }
+    else if(!ValeurCorrecte(strlen($nom), 2, 50)){
+        $valide = false;
+        $erreur = "le nom doit être entre 2 et 50 caractères";
+    }
+    else if(!ValeurCorrecte(strlen($courriel), 6, 254)){
+        $valide = false;
+        $erreur = "l'adresse courriel doit être entre 6 et 254 caractères";
+    }
 
-?>
-<h3 class="erreur"><?=$_SESSION['message']?></h3>
-<?php 
+    if($valide){
+        $statut = modifier_usager($nom, $prenom, $courriel, $idUsager);
+        if(!$statut[0])
+            $erreur = $statut[1];
+        else
+            $succes = "informations modifiées !";
+    }
+}
+
+    $informations_usager = obtenir_informations_profil($idUsager);  
+    $nom_en_bd = $informations_usager["nom"];
+    $prenom_en_bd = $informations_usager["prenom"];
+    $courriel_en_bd = $informations_usager["courriel"];  
 
     if(isset($_SESSION['email_confirme'])&&!$_SESSION['email_confirme']){
         include_once './include/message_demande_conf.php';
     }  
+    
     include_once './include/funcAfficherAnnonce.php';
     include_once './include/bd.php';
-
-    // lire toutes les lignes dans un tableau
-    $idUsager = $_SESSION['id'];        
 
     if(isset($idUsager)){
         try{
@@ -36,18 +65,12 @@ if($method == "GET"){
             exit(1); // termine immédiatement le programme
         }
     }else{
-        echo "
-            <h3 class='erreur'>Il faut croire que vos informations ne son pas inscrite dans le cookies. Les avez-vous activé?</h3>
-        ";
+        header("Location: index.php");
+        exit;
     }
     ?>
     <?php 
-        if(count($articles) > 0):
-            $id_usager = $_SESSION['id'];
-            $informations_usager = obtenir_informations_profil($id_usager);  
-            $nom_en_bd = $informations_usager["nom"];
-            $prenom_en_bd = $informations_usager["prenom"];
-            $courriel_en_bd = $informations_usager["courriel"];  
+        if(count($articles) > 0):            
     ?>
     <main class="page-profil">
         <div class="vitrine-profil">  
@@ -58,20 +81,21 @@ if($method == "GET"){
             ?>
         </div>
         <div>
+            <p class="erreur"><?=$erreur??''?></p>
             <fieldset class="fieldset">
             <legend>informations du profil</legend>
-            <form class="form-perso">
+            <form class="form-perso" method="POST">
                 <div class="form-ligne">
                     <label for="nom">nom</label>    
                     <input type="text" name="nom" id="nom" value="<?=$nom_en_bd?>"/>
                 </div>
                 <div class="form-ligne">
-                    <label for="nom">prenom</label>    
-                    <input type="text" name="nom" id="nom" value="<?=$prenom_en_bd?>"/>
+                    <label for="prenom">prenom</label>    
+                    <input type="text" name="prenom" id="prenom" value="<?=$prenom_en_bd?>"/>
                 </div>
                 <div class="form-ligne">
-                    <label for="nom">courriel</label>    
-                    <input type="text" name="nom" id="nom" value="<?=$courriel_en_bd?>"/>
+                    <label for="courriel">courriel</label>    
+                    <input type="email" name="courriel" id="courriel" value="<?=$courriel_en_bd?>"/>
                 </div>
                 <div class="form-ligne"> 
                     <a href="modifier_mdp.php" class="">modifier le mot de passe</a>
@@ -86,6 +110,7 @@ if($method == "GET"){
                 </div>            
             </form>
             </fieldset>
+            <p class="succes"><?=$succes??''?></p>
         </div>
     </main>
     <?php else: ?>

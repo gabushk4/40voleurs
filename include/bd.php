@@ -154,6 +154,21 @@ function connecter_usager($pseudo, $mdp): mixed{
         return [];
     }
 }
+function modifier_usager($nom, $prenom, $courriel, $idUsager){
+    $sql = "UPDATE usager SET nom = ?, prenom = ?, courriel = ? WHERE id = ?";
+
+    try{
+        $pdo = get_pdo();
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$nom, $prenom, $courriel, $idUsager]);
+        if($stmt->rowCount()>0){
+            return [true, 'profil modifié avec succès'];
+        }else
+            return [false, "données entrées invalides"];
+    }catch(Exception $e){
+        return [false, "problème avec la base de données: $e"];
+    }
+}
 /**
  * Obtient le pseudo d'un usager avec son id
  * @param int $id_usager
@@ -204,7 +219,6 @@ function obtenir_categories(){
     try{
         $pdo = get_pdo();
         $stmt = $pdo->query($sql);
-        echo var_dump($stmt);
         return $stmt;
     }catch(Exception $e){
         echo "erreur de connexion $e";

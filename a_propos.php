@@ -8,7 +8,7 @@
     ?>
     <main>
         <h1>À propos</h1><br>
-        <div>
+        <div class="page">
             <p>Réalisé dans le cadre du cours de Développement d'applications Web 1.</p><br>
             <p>Au collège Lionel-Groulx à Sainte-Thérèse durant la session d'automne 2025.</p>
         </div>

@@ -19,56 +19,61 @@
         $idCategorie = $_POST['categorie']??-1; 
     }
     include_once 'bd.php';
+    $categories = obtenir_categories();
 ?>
 
 <nav class="nav-custom">
     <div class="nav-I">
         <a href="index.php" class="brand">
-            <img src="./assets/brand.png" class="" href="./index.php" alt="raton-laveur">
+            <img src="./assets/brand.png" class="" alt="raton-laveur">
             <p>Les 40 voleurs</p>
         </a>
         <form class="barre-rech" role="search">
-            <input class="" type="search" placeholder="rechercher" aria-label="recherche"/>
+            <input type="search" placeholder="rechercher" aria-label="recherche">
             <button class="btn-normal" type="submit">
                 <img src="./assets/rechercher.png" width="32" height="32" alt="loupe">
             </button>
         </form>
     </div>
-    <ul class="nav-menu">
-        <a id="hamburger">☰</a>   
+    <a id="hamburger">☰</a> 
+    <form method="POST">
+    <ul class="nav-menu">        
         <li>
             <?php if($connecte)
                 echo "<a href='./vendre.php'>vendre</a>";
             ?>
-        </li>
-        <form method="POST">
+        </li>   
+        <li>
             <select class="dropdown-button" name="categorie" onchange="this.form.submit()">
                 <option value="-1">toutes</option>
                 <?php
-                    $stmt = obtenir_categories();
-                    if(isset($stmt)){                                
-                        foreach($stmt as $row){
+                    
+                    if(isset($categories)){                                
+                        foreach($categories as $row){
                             $selectionne = $row['id'] == $idCategorie;
-                            echo "<option value='".$row['id']."' ".($selectionne?'selected':'').">".$row['titre']."</option>";
+                            $value = $row['id'];
+                            $titre = $row['titre'];
+                            echo "<option value='$value' ".($selectionne?'selected':'').">$titre</option>";
                         }
                     }else
                         echo "<option value='6'>autres</option>";
                 ?>
-            </select>
-        </form>
+            </select>  
+        </li>           
         <li>
             <a href="./a_propos.php">à propos</a>
         </li>
     </ul>  
+    </form>
     <div id="theme">
         <button id="theme-toggle" class="btn-normal">Changer de thème</button>
     </div> 
 
     <?php if(!$connecte): ?>
         <div id='compte-btns'>
-                <a class='btn-normal' href='connexion.php'>connexion</a>
-                <a class='btn-imp' href='inscription.php'>inscription</a>  
-        <div> 
+            <a class='btn-normal' href='connexion.php'>connexion</a>
+            <a class='btn-imp' href='inscription.php'>inscription</a>  
+        </div> 
             
     <?php elseif (isset($_SESSION['pseudo'])): 
         $pseudo = $_SESSION['pseudo'];

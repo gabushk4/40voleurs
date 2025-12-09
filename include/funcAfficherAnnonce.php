@@ -19,14 +19,14 @@ function afficherAnnonce($annonce, $afficherPseudo=true, $afficherSupprimer=fals
                 <button class='btn-supprimer' type='submit'>
                     <img
                         src='./assets/croix.png'
-                    />
+                    >
                 </button>
             </form>
             ";
         }
         echo "
                 <a href='$image' target='_blank'>
-                    <img src='$image' alt='".$annonce["chemin_image"]."'/>
+                    <img src='$image' alt='".$annonce["chemin_image"]."'>
                 </a>
                 <div class='annonce-texte-conteneur'>
                     <div>
