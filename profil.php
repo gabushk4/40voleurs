@@ -9,18 +9,7 @@ if($method == "GET"){
     $_SESSION['message']="";
 }
 
-if($method == 'POST'){
-    if(isset($_POST['idArticle'])){
-        $idArticle = $_POST['idArticle'];
-        if(!supprimer_article($idArticle)){
-            $_SESSION['message']="impossible de supprimer l'article avec l'id $idArticle; veuilleuz réessayer plus tard";
-            
-        }
-    }
-    else{
-        $_SESSION['message'] = "impossible de trouver l'article; informations manquantes ou invalides";
-    }
-}
+
 ?>
 <h3 class="erreur"><?=$_SESSION['message']?></h3>
 <?php 
@@ -52,13 +41,52 @@ if($method == 'POST'){
         ";
     }
     ?>
-    <?php if(count($articles) > 0):?>
-    <main class="vitrine">  
-        <?php
-            foreach ($articles as $article){
-                afficherAnnonce($article, false);            
-            }
-        ?>
+    <?php 
+        if(count($articles) > 0):
+            $id_usager = $_SESSION['id'];
+            $informations_usager = obtenir_informations_profil($id_usager);  
+            $nom_en_bd = $informations_usager["nom"];
+            $prenom_en_bd = $informations_usager["prenom"];
+            $courriel_en_bd = $informations_usager["courriel"];  
+    ?>
+    <main class="page-profil">
+        <div class="vitrine-profil">  
+            <?php
+                foreach ($articles as $article){
+                    afficherAnnonce($article, false, true);            
+                }
+            ?>
+        </div>
+        <div>
+            <fieldset class="fieldset">
+            <legend>informations du profil</legend>
+            <form class="form-perso">
+                <div class="form-ligne">
+                    <label for="nom">nom</label>    
+                    <input type="text" name="nom" id="nom" value="<?=$nom_en_bd?>"/>
+                </div>
+                <div class="form-ligne">
+                    <label for="nom">prenom</label>    
+                    <input type="text" name="nom" id="nom" value="<?=$prenom_en_bd?>"/>
+                </div>
+                <div class="form-ligne">
+                    <label for="nom">courriel</label>    
+                    <input type="text" name="nom" id="nom" value="<?=$courriel_en_bd?>"/>
+                </div>
+                <div class="form-ligne"> 
+                    <a href="modifier_mdp.php" class="">modifier le mot de passe</a>
+                </div>
+                <div class="form-ligne" style="height:56px">
+                    <button type="reset" class="btn-normal" style="width:48%; font-size: 24px;">
+                        annuler
+                    </button>
+                    <button type="submit" class="btn-imp" style="width:48%; font-size: 24px;">
+                        modifier
+                    </button>
+                </div>            
+            </form>
+            </fieldset>
+        </div>
     </main>
     <?php else: ?>
         <main>

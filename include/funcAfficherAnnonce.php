@@ -1,6 +1,6 @@
 <?php 
 include_once 'bd.php';
-function afficherAnnonce($annonce, $afficherPseudo=true) {    
+function afficherAnnonce($annonce, $afficherPseudo=true, $afficherSupprimer=false) {    
     if(is_array($annonce)){
         $negociable = $annonce["negociable"] == 1 ? "négociable" : "non négociable";
         $image = './assets/brand.png';
@@ -12,7 +12,7 @@ function afficherAnnonce($annonce, $afficherPseudo=true) {
         echo "
             <div class='annonce'>
         ";
-        if(!$afficherPseudo){
+        if($afficherSupprimer){
             echo "
             <form method='POST'>
                 <input type='hidden' name='idArticle' value=".$annonce["id"].">

@@ -15,7 +15,7 @@
                 $articles = obtenir_articles($idCategorie);
                 if(isset($articles)){
                     foreach ($articles as $article){
-                        afficherAnnonce($article);            
+                        afficherAnnonce($article, afficherSupprimer:$estAdmin);            
                     }
                 }
                 else{

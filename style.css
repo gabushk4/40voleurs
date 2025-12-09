@@ -59,13 +59,15 @@
 
 main{
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 32px ;
+    padding: 32px 0;
 }
 
 html, body, main, .vitrine{
-    height: 100%;
+    min-height: 100%;
+    height: fit-content;
 }
 
 
@@ -152,8 +154,8 @@ nav li{
     display: flex;
     justify-content: center;
 }
-nav a{
-    text-decoration-line: none;
+nav a, footer a{
+    text-decoration: none;
     color: var(--primary);
     transition: color 0.3s ease-in;
 }
@@ -233,7 +235,8 @@ nav label{
     background-color: var(--secondary);
 }
 a{
-    text-decoration: none;
+    color: var(--secondary);
+    transition: color 0.3s ease-in;
 }
 a:hover{
     color: var(--hover)
@@ -366,6 +369,9 @@ footer div{
     margin-bottom: 8px;
     color: var(--secondary);
 }
+.form-ligne label{
+    width: 50%;
+}
 .form-ligne input{
     background-color:var(--secondary);
     color:var(--primary);
@@ -410,6 +416,7 @@ footer div{
 }
 h1{
     color: var(--secondary);
+    margin-bottom: 16px;
 }
 h2{
     color: var(--secondary);
@@ -456,4 +463,22 @@ h2{
 }
 .demande-conf > p{
     color:var(--secondary);
+}
+.page-profil{
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    width: 100%;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex:1;
+}
+.vitrine-profil{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 2 colonnes de largeur égale */
+    gap: 36px; /* espace entre les annonces */
+    width: 50%;
+    box-sizing: border-box;
+    align-items: flex-start;
+    flex:1;
 }

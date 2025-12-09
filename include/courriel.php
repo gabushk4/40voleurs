@@ -33,7 +33,7 @@
             // adresse de destination
             $mail->addAddress($courrielDestinataire, obtenir_pseudo($idDestinataire));
             
-            $lien = "http://142.44.247.33/~usager41/quarante_voleurs_dev/confirmation.php?id_usager=$idDestinataire";
+            $lien = "http://142.44.247.33/~usager41/quarante_voleurs/confirmation.php?id_usager=$idDestinataire";
             $emailHtml = <<<HTML
                 <!DOCTYPE html>
                 <html>

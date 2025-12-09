@@ -1,3 +1,22 @@
+<?php
+    include_once 'include/bd.php';
+    session_start();
+
+    $method = $_SERVER['REQUEST_METHOD'];
+
+    if($method == 'POST'){
+        if(isset($_POST['idArticle'])){
+            $idArticle = $_POST['idArticle'];
+            if(!supprimer_article($idArticle)){
+                $_SESSION['message']="impossible de supprimer l'article; veuilleuz réessayer plus tard";                
+            }
+            else{
+                $_SESSION['message'] = "impossible de trouver l'article; informations manquantes ou invalides";
+            }
+        }
+    }
+?>
+
 <!doctype html>
 <html lang="fr">
     <head>

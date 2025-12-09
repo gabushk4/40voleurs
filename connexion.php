@@ -11,13 +11,14 @@
         $mdp = trim($_POST['mdp']);        
 
         $usager = connecter_usager(pseudo: $pseudo, mdp: $mdp);
-
+        
         if(count($usager) > 0){    
             $_SESSION['connecteA40V'] = true;
             $_SESSION['pseudo'] = $pseudo;
             $_SESSION['id'] = $usager['id'];
-            $_SESSION['email_confirme'] = $usager['email_confirme'];
+            $_SESSION['email_confirme'] = $usager['email_confirme'] == 1;
             $_SESSION['courriel'] = $usager['courriel'];
+            $_SESSION['est_admin'] = $usager['admin'] == 1;
             header("Location: index.php");
             exit;             
         }else{

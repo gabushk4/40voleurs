@@ -15,7 +15,7 @@
     const MAX_PSEUDO = 20;
     const URL_BASE = 'http://142.44.247.33/~usager41/quarante_voleurs/vendre.php';
     $emailConfirme = $_SESSION['email_confirme'];
-    
+
     if($emailConfirme): ?>
     <main class="main-form">
         <div class="historique-vendre">

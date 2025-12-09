@@ -124,11 +124,11 @@ function ajouter_usager($pseudo, $mdp, $nom, $prenom, $courriel){
     }
 }
 /**
-Vérifie les informations d'un usager à la connexion. Retourne l'usager ou null 
+Vérifie les informations d'un usager à la connexion. Retourne l'usager [] ou null 
 pour indiquer le succès ou l'échec de l'opération.
 */
 function connecter_usager($pseudo, $mdp): mixed{
-    $sql = "SELECT mdp, id, courriel FROM usager WHERE pseudo = ?";
+    $sql = "SELECT mdp, id, courriel, email_confirme, admin FROM usager WHERE pseudo = ?";
 
     try{
         $pdo = get_pdo();
@@ -147,11 +147,11 @@ function connecter_usager($pseudo, $mdp): mixed{
             
             return $usager;
         }else{
-            return null;
+            return [];
         }
     }catch(Exception $e){
         echo "erreur de connexion $e";
-        return null;
+        return [];
     }
 }
 /**
@@ -175,6 +175,20 @@ function obtenir_pseudo($id_usager){
             return null;
 
         return $pseudo;
+    }catch(Exception $e){
+        echo "erreur de connexion $e";
+        return null;
+    }
+}
+function obtenir_informations_profil($id_usager){
+    $sql = "SELECT nom, prenom, courriel FROM usager WHERE id = ?";
+
+    try{
+        $pdo = get_pdo();
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$id_usager]);
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }catch(Exception $e){
         echo "erreur de connexion $e";
         return null;
@@ -224,5 +238,30 @@ function confirmer_courriel($idUsager){
     }catch(Exception $e){
         //$_SESSION['message']=$e;
         return null;
+    }
+}
+function changer_mdp($mdpActuel, $nouvMdp, $idUsager){
+    $sqlVerifMdp = 'SELECT mdp FROM usager WHERE id = ?';
+    $sqlUpdateMdp = 'UPDATE usager SET mdp = ? WHERE id = ?';
+
+    try{
+        $pdo = get_pdo();
+        $stmt = $pdo -> prepare($sqlVerifMdp);
+        $stmt->execute([$idUsager]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        $mdpHashed = $row['mdp'];
+        if(!isset($mdpHashed) || !password_verify($mdpActuel, $mdpHashed)){
+            return [false, "mot de passe actuel entré invalide"];
+        }
+        $nouvMdpHashed = password_hash($nouvMdp, PASSWORD_DEFAULT);
+        $stmt = $pdo -> prepare($sqlUpdateMdp);
+        $stmt->execute([$nouvMdpHashed, $idUsager]);
+        if($stmt->rowCount()>0)
+            return [true, "mot de passe changé"];
+        else
+            return [false, "nouveau mot de passe invalide"];
+        
+    }catch(Exception $e){
+        return [false, "problème à la connexion: $e"];
     }
 }
