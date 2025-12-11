@@ -15,7 +15,7 @@
     const MAX_PSEUDO = 20;
     const URL_BASE = 'http://142.44.247.33/~usager41/quarante_voleurs/vendre.php';
     $emailConfirme = $_SESSION['email_confirme'];
-    $categories = obtenir_categories();
+    
 
     if($emailConfirme): ?>
     <main class="main-form">
@@ -226,7 +226,7 @@
                 }                
             ?>
         </div>
-        <h2>Vendre</h2>
+        <h2>vendre</h2>
         <h3 class="erreur">
             <?=$_SESSION['erreur_vendre']??''?>
         </h3>
@@ -243,19 +243,7 @@
                 </div>
                 <div class="form-ligne">
                     <label for="categories">categories</label>
-                    <select name="categorie" id="categories">
-                        <?php
-                            
-                            if(isset($categories)){                                
-                                foreach($categories as $row){
-                                    $id = $row['id'];
-                                    $titre = $row['titre'];
-                                    echo "<option value='$id' >$titre</option>";
-                                }
-                            }else
-                                echo "<option value='6'>divers</option>";
-                        ?>
-                    </select>
+                    <?php include_once "./include/select_categories.php"; ?>
                 </div>
                 <div class="form-ligne">
                     <label for="prix">prix ($)</label>

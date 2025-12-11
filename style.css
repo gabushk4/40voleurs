@@ -270,7 +270,7 @@ button{
 }
 form button{
     margin-left: -1px;
-    
+    height:36px;
 }
 button:hover{    
     background-color: var(--hover);
@@ -367,10 +367,11 @@ footer div{
     justify-content: space-between;
     align-items: center;
     margin-bottom: 8px;
+    gap:8px;
     color: var(--secondary);
 }
 .form-ligne label{
-    width: 50%;
+    width: fit-content;
 }
 .form-ligne input{
     background-color:var(--secondary);
@@ -410,9 +411,6 @@ footer div{
     background-color:var(--secondary);
     color:var(--primary);
     font-size: 20px;
-}
-.fieldset{
-    padding: 0px 8px;
 }
 h1{
     color: var(--secondary);
@@ -464,13 +462,13 @@ h2{
 .demande-conf > p{
     color:var(--secondary);
 }
-.page-profil{
+.main-horizontal{
     display: flex;
     flex-direction: row;
     height: 100%;
     width: 100%;
     align-items: flex-start;
-    justify-content: space-between;
+    justify-content: space-evenly;
     flex:1;
 }
 .vitrine-profil{
@@ -485,4 +483,11 @@ h2{
 .page>p{
     color: var(--secondary);
 
+}
+fieldset{
+    border-color: var(--secondary);
+    padding: 0px 8px;
+}
+legend{
+    color: var(--secondary);
 }

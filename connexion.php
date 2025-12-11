@@ -12,7 +12,7 @@
 
         $usager = connecter_usager(pseudo: $pseudo, mdp: $mdp);
         
-        if(count($usager) > 0){    
+        if(isset($usager)){    
             $_SESSION['connecteA40V'] = true;
             $_SESSION['pseudo'] = $pseudo;
             $_SESSION['id'] = $usager['id'];

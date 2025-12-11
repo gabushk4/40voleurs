@@ -63,6 +63,12 @@
         <li>
             <a href="./a_propos.php">à propos</a>
         </li>
+    <?php if($estAdmin):?>
+        <li>    
+            <a href="./admin.php">administration</a>            
+        </li>
+    <?php endif; ?>
+        
     </ul>  
     </form>
     <div id="theme">

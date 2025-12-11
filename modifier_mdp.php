@@ -2,17 +2,28 @@
     include_once "./include/head.php";
     include_once "./include/nav.php";
     include_once "./include/bd.php";
+    include "./include/funcValeurCorrecte.php";
 
     $erreur = null;
     $succes = null;
 
     if($_SERVER['REQUEST_METHOD'] == "POST"){
+        $valide = true;
         $mdpActuel = trim($_POST['mdp_actuel']);
         $nouvMdp = trim($_POST["mdp_nouveau"]);
         $nouvMdpConf = trim($_POST["mdp_nouveau_conf"]);
         $idUsager = $_SESSION["id"];
+
+        if(!ValeurCorrecte(strlen($nouvMdp), 12, 64)){
+            $erreur = "le mot de passe doit être au minimum 12 caractères de long";
+            $valide = false;
+        }
+        if($nouvMdp !== $nouvMdpConf){
+            $erreur = "la confirmation du mot de passe et le nouveau mot de passe ne correspondent pas";
+            $valide = false;
+        }
         
-        if($nouvMdp === $nouvMdpConf){
+        if($valide){
             $statut = changer_mdp($mdpActuel, $nouvMdp, $idUsager);
             if($statut[0]){
                 $succes = $statut[1];
@@ -22,9 +33,6 @@
             else{
                 $erreur = $statut[1];
             }
-        }
-        else{
-            $erreur = "la confirmation du mot de passe et le nouveau mot de passe ne correspondent pas";
         }
     }
 ?>

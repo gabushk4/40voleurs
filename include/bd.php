@@ -209,9 +209,40 @@ function obtenir_informations_profil($id_usager){
         return null;
     }
 }
+function obtenir_tous_usagers(){
+    $sql = "SELECT id, pseudo FROM usager";
+
+    try{
+        $pdo = get_pdo();
+        $stmt = $pdo->query($sql);
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if(isset($rows)&& count($rows)>0){
+            return [true, $rows];
+        }else
+            return [false, "aucuns usagers retournés"];
+    }catch(Exception $e){
+        return [false, $e];
+    }
+}
+
+function supprimer_usager($id){
+    $sql = "DELETE FROM usager WHERE id = ?";
+    try{
+        $pdo = get_pdo();
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$id]);
+        if($stmt->rowCount() > 0)
+            return [true, "usager supprimé avec succès"];
+        else
+            return [false, "usager non supprimé"];
+    }catch(Exception $e){
+        return [false, $e];
+    }
+}
 /**
  * obtient toutes les catégories 
- * @return PDOStatement|null Retourne null si l'operation echoue
+ * @return array|null Retourne null si l'operation echoue
  */
 function obtenir_categories(){
     $sql = "SELECT * FROM categorie";
@@ -219,7 +250,8 @@ function obtenir_categories(){
     try{
         $pdo = get_pdo();
         $stmt = $pdo->query($sql);
-        return $stmt;
+        $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $row;
     }catch(Exception $e){
         echo "erreur de connexion $e";
         exit;
@@ -232,13 +264,43 @@ function obtenir_titre_categorie($idCategorie){
 
     try{
         $pdo = get_pdo();
-        $stmt = $pdo->query($sql);
-        echo var_dump($stmt);
-        return $stmt;
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$idCategorie]);
+        $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $row["titre"];
     }catch(Exception $e){
         echo "erreur de connexion $e";
         exit;
         
+    }
+}
+function ajouter_categorie($titre){
+    $sql = "INSERT INTO categorie(titre) VALUES (?)";
+
+    try{
+        $pdo = get_pdo();
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$titre]);
+        if($stmt->rowCount() > 0)
+            return [true, "catégorie inserée"];
+        else
+            return [false, "un problème est survenue a l'insertion"];
+    }catch(Exception $e){
+        return [false, $e];
+    }
+}
+function supprimer_categorie($id){
+    $sql = "DELETE FROM categorie WHERE id = ?";
+    try{
+        $pdo = get_pdo();
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$id]);
+        if($stmt->rowCount() > 0)
+            return [true, "catégorie supprimée avec succès"];
+        else
+            return [false, "catégorie non supprimée"];
+    }catch(Exception $e){
+        return [false, $e];
     }
 }
 function confirmer_courriel($idUsager){
@@ -279,3 +341,4 @@ function changer_mdp($mdpActuel, $nouvMdp, $idUsager){
         return [false, "problème à la connexion: $e"];
     }
 }
+

@@ -72,7 +72,7 @@ if($method == "POST"){
     <?php 
         if(count($articles) > 0):            
     ?>
-    <main class="page-profil">
+    <main class="main-horizontal">
         <div class="vitrine-profil">  
             <?php
                 foreach ($articles as $article){
