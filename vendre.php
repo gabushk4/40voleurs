@@ -1,5 +1,6 @@
 
 <?php 
+    $titre = "vendre";
     include "./include/head.php";
     include "./include/nav.php";
     include_once './include/bd.php';

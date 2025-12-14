@@ -1,4 +1,6 @@
-<?php include "./include/head.php"?>
+<?php 
+    $titre = 'à propos';
+    include "./include/head.php"?>
     <div class="header-image"></div>
     <?php include "./include/nav.php";
         

@@ -1,4 +1,5 @@
 <?php 
+$titre = "profil";
 include_once './include/head.php';
 include_once './include/nav.php';
 include_once 'include/bd.php';

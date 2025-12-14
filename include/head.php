@@ -15,6 +15,7 @@
             }
         }
     }
+    $titre = $titre??'';
 ?>
 
 <!doctype html>
@@ -31,8 +32,7 @@
         <script src="./script.js" defer></script>
         <link href="./style.css" rel="stylesheet">
         <link rel="icon" type="image/png" href="./assets/brand.png">
-        <title>Les quarante voleurs</title>        
-        
+        <title>Les quarante voleurs<?=$titre?" - $titre":''?></title>
     </head>
     <body>
         <header>
