@@ -12,10 +12,12 @@
             $erreur = '';
             $recherche = '';
             $date = '';
+            $dateOriginale = '';
             $prixMin = 0;
             $prixMax = 2000000;
             $idCategorie = -1;
             $offset=0;
+
         }
         
         if($method == "POST"){        

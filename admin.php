@@ -62,7 +62,7 @@
                             $id = $usager['id'];
                             $pseudo = $usager['pseudo'];
                             echo "
-                                <option value='$id' name='id'>$pseudo</option>
+                                <option value='$id'>$pseudo</option>
                                 ";
                         }
                     }else
