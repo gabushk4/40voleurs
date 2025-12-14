@@ -52,9 +52,8 @@ function ajouter_article($categorie, $usager, $titre, $description, $prix,
 Retourne une liste d'articles. Retourne false pour indiquer l'échec
 de l'opération.
 */
-function obtenir_articles($categorie = -1, $offset = 0, $recherche = '', $date='', $prixMin = 0, $prixMax=2000000):mixed{
-    $limit = 16;
-    $offset *= $limit;
+function obtenir_articles($categorie = -1, $offset = 0, $limite = 16, $recherche = '', $date='', $prixMin = 0, $prixMax=2000000):mixed{
+    $offset *= $limite;
     $sqlBase = "SELECT a.id, a.titre, a.description, a.prix, a.id_categorie, a.negociable, a.date_pub, u.pseudo, a.chemin_image FROM article a JOIN usager u ON a.id_usager = u.id WHERE (prix <= ? AND prix >= ?)";
     $values = [$prixMax, $prixMin];
 
@@ -72,7 +71,7 @@ function obtenir_articles($categorie = -1, $offset = 0, $recherche = '', $date='
         array_push($values, $categorie);
     }
     
-    $sqlReste = "ORDER BY date_pub DESC LIMIT $limit OFFSET $offset";
+    $sqlReste = "ORDER BY date_pub DESC LIMIT $limite OFFSET $offset";
 
     $sqlFinal = "$sqlBase $sqlReste";
 
@@ -87,7 +86,7 @@ function obtenir_articles($categorie = -1, $offset = 0, $recherche = '', $date='
         return null;
     }
 }
-function obtenir_nb_articles($categorie = -1, $offset = 0, $recherche = '', $date='', $prixMin = 0, $prixMax=2000000):mixed{
+function obtenir_nb_articles($categorie = -1, $recherche = '', $date='', $prixMin = 0, $prixMax=2000000):mixed{
     $sqlFinal = "SELECT COUNT(a.id) as nb_articles FROM article a JOIN usager u ON a.id_usager = u.id WHERE (prix <= ? AND prix >= ?)";
     $values = [$prixMax, $prixMin];
 
@@ -109,8 +108,8 @@ function obtenir_nb_articles($categorie = -1, $offset = 0, $recherche = '', $dat
         $pdo = get_pdo();
         $stmt = $pdo->prepare($sqlFinal); 
         $stmt->execute($values);                    
-        $rows = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $rows;
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row['nb_articles'];
     }catch(Exception $e){
         echo "une erreur est survenue $e";
         return null;
@@ -121,14 +120,29 @@ function obtenir_nb_articles($categorie = -1, $offset = 0, $recherche = '', $dat
  * @param int $idUsager 
  * @return array|null Retourne le stmt  si ca a marché
  */
-function obtenir_articles_usager($idUsager):mixed{
-    $sql = "SELECT * FROM article WHERE id_usager = ? ORDER BY date_pub DESC";
+function obtenir_articles_usager($idUsager, $offset = 0, $limite = 12):mixed{
+    $offset *= $limite;
+    $sql = "SELECT * FROM article WHERE id_usager = ? ORDER BY date_pub DESC LIMIT $limite OFFSET $offset";
 
     try{
         $pdo = get_pdo();
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$idUsager]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }catch(Exception $e){
+        echo "une erreur est survenue $e";
+        return null;
+    }
+}
+function obtenir_nb_articles_usager($idUsager){
+    $sql = "SELECT COUNT(id) as nb_articles FROM article WHERE id_usager = ? ORDER BY date_pub DESC";
+
+    try{
+        $pdo = get_pdo();
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$idUsager]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row['nb_articles'];
     }catch(Exception $e){
         echo "une erreur est survenue $e";
         return null;

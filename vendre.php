@@ -220,7 +220,7 @@
                                 "negociable"=>$negociable,
                                 "chemin_image"=>$img_url,
                                 "date_pub"=>$dateAjout,
-                                "id_usager"=>$id_usager
+                                "pseudo"=>obtenir_pseudo($id_usager)
                             ]);
                             echo "
                                 <div class='revenir-accueil'>
