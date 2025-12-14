@@ -39,7 +39,7 @@ function afficherAnnonce($annonce, $afficherPseudo=true, $afficherSupprimer=fals
         ";
         if ($afficherPseudo) {
             echo "
-                        <p class='annonce-auteur'>".obtenir_pseudo($annonce['id_usager'])."</p>
+                        <p class='annonce-auteur'>".$annonce['pseudo']."</p>
             ";
         }
         echo "

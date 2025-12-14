@@ -11,15 +11,6 @@
     if(isset($_SESSION['est_admin'])){
         $estAdmin = $_SESSION['est_admin'];
     }
-   
-    $method = $_SERVER['REQUEST_METHOD'];
-    
-    $idCategorie = -1;
-    if($method == "POST"){        
-        $idCategorie = $_POST['categorie']??-1; 
-    }
-    include_once 'bd.php';
-    $categories = obtenir_categories();
 ?>
 
 <nav class="nav-custom">
@@ -28,38 +19,15 @@
             <img src="./assets/brand.png" class="" alt="raton-laveur">
             <p>Les 40 voleurs</p>
         </a>
-        <form class="barre-rech" role="search">
-            <input type="search" placeholder="rechercher" aria-label="recherche">
-            <button class="btn-normal" type="submit">
-                <img src="./assets/rechercher.png" width="32" height="32" alt="loupe">
-            </button>
-        </form>
+        
     </div>
-    <a id="hamburger">☰</a> 
-    <form method="POST">
+    <a id="hamburger">☰</a>     
     <ul class="nav-menu">        
         <li>
             <?php if($connecte)
                 echo "<a href='./vendre.php'>vendre</a>";
             ?>
-        </li>   
-        <li>
-            <select class="dropdown-button" name="categorie" onchange="this.form.submit()">
-                <option value="-1">toutes</option>
-                <?php
-                    
-                    if(isset($categories)){                                
-                        foreach($categories as $row){
-                            $selectionne = $row['id'] == $idCategorie;
-                            $value = $row['id'];
-                            $titre = $row['titre'];
-                            echo "<option value='$value' ".($selectionne?'selected':'').">$titre</option>";
-                        }
-                    }else
-                        echo "<option value='6'>autres</option>";
-                ?>
-            </select>  
-        </li>           
+        </li>            
         <li>
             <a href="./a_propos.php">à propos</a>
         </li>
@@ -67,14 +35,11 @@
         <li>    
             <a href="./admin.php">administration</a>            
         </li>
-    <?php endif; ?>
-        
+    <?php endif; ?>        
     </ul>  
-    </form>
     <div id="theme">
         <button id="theme-toggle" class="btn-normal">Changer de thème</button>
     </div> 
-
     <?php if(!$connecte): ?>
         <div id='compte-btns'>
             <a class='btn-normal' href='connexion.php'>connexion</a>

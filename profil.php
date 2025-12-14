@@ -32,6 +32,7 @@ if($method == "POST"){
     }
 
     if($valide){
+        $_SESSION['courriel'] = $courriel;
         $statut = modifier_usager($nom, $prenom, $courriel, $idUsager);
         if(!$statut[0])
             $erreur = $statut[1];
@@ -69,10 +70,10 @@ if($method == "POST"){
         exit;
     }
     ?>
+    <main class="main-horizontal">
     <?php 
         if(count($articles) > 0):            
-    ?>
-    <main class="main-horizontal">
+    ?>   
         <div class="vitrine-profil">  
             <?php
                 foreach ($articles as $article){
@@ -80,6 +81,12 @@ if($method == "POST"){
                 }
             ?>
         </div>
+        
+    <?php else: ?>
+        <main>
+            <a href='vendre.php'>vendre</a>
+        </main>
+    <?php endif; ?>
         <div>
             <p class="erreur"><?=$erreur??''?></p>
             <fieldset class="fieldset">
@@ -113,12 +120,6 @@ if($method == "POST"){
             <p class="succes"><?=$succes??''?></p>
         </div>
     </main>
-    <?php else: ?>
-        <main>
-            <a href='vendre.php'>vendre</a>
-        </main>
-    <?php 
-        endif;
-
+    <?php
         include './include/footer.php';
     ?>

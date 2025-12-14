@@ -78,3 +78,4 @@
         <p class="succes"><?=$succesUsagers??''?></p>
     </fieldset>
 </main>
+<?php include "./include/footer.php";?>

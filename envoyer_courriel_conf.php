@@ -7,9 +7,11 @@ $method = $_SERVER['REQUEST_METHOD'];
 $succes = '';
 $erreur = '';
 
-if($method == 'POST'){
-    $courriel = $_SESSION['courriel'];
+if($method == 'POST'){   
     $idUsager = $_SESSION['id'];
+    $usager = obtenir_informations_profil($idUsager);
+    $courriel = $usager['courriel'];
+    
     if(isset($courriel)){
         $envoye = envoyer_courriel_confirmation($courriel, $idUsager);
         if($envoye)

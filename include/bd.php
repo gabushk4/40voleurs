@@ -52,19 +52,65 @@ function ajouter_article($categorie, $usager, $titre, $description, $prix,
 Retourne une liste d'articles. Retourne false pour indiquer l'échec
 de l'opération.
 */
-function obtenir_articles($categorie = -1, $offset = 0):mixed{
-    $limit = 10;
+function obtenir_articles($categorie = -1, $offset = 0, $recherche = '', $date='', $prixMin = 0, $prixMax=2000000):mixed{
+    $limit = 16;
     $offset *= $limit;
+    $sqlBase = "SELECT a.id, a.titre, a.description, a.prix, a.id_categorie, a.negociable, a.date_pub, u.pseudo, a.chemin_image FROM article a JOIN usager u ON a.id_usager = u.id WHERE (prix <= ? AND prix >= ?)";
+    $values = [$prixMax, $prixMin];
 
-    if($categorie < 0)
-        $sql = "SELECT * FROM article ORDER BY date_pub DESC LIMIT $limit OFFSET $offset";
-    else
-        $sql = $sql = "SELECT * FROM article WHERE id_categorie = $categorie ORDER BY date_pub DESC LIMIT $limit OFFSET $offset";
+    if(strlen($recherche)>0){
+        $recherche = "%$recherche%";
+        $sqlBase .= " AND (a.titre LIKE ? OR a.description LIKE ? OR u.pseudo LIKE ?)"; 
+        array_push($values, $recherche, $recherche, $recherche);
+    }
+    if($date != ''){
+        $sqlBase .= " AND (date_pub >= ?)";
+        array_push($values, $date);
+    }
+    if($categorie > 0){
+        $sqlBase .= " AND id_categorie = ?";
+        array_push($values, $categorie);
+    }
+    
+    $sqlReste = "ORDER BY date_pub DESC LIMIT $limit OFFSET $offset";
+
+    $sqlFinal = "$sqlBase $sqlReste";
 
     try{
-        $pdo = get_pdo();        
-        $stmt = $pdo->query($sql);   
-        return $stmt;
+        $pdo = get_pdo();
+        $stmt = $pdo->prepare($sqlFinal); 
+        $stmt->execute($values);                    
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $rows;
+    }catch(Exception $e){
+        echo "une erreur est survenue $e";
+        return null;
+    }
+}
+function obtenir_nb_articles($categorie = -1, $offset = 0, $recherche = '', $date='', $prixMin = 0, $prixMax=2000000):mixed{
+    $sqlFinal = "SELECT COUNT(a.id) as nb_articles FROM article a JOIN usager u ON a.id_usager = u.id WHERE (prix <= ? AND prix >= ?)";
+    $values = [$prixMax, $prixMin];
+
+    if(strlen($recherche)>0){
+        $recherche = "%$recherche%";
+        $sqlFinal .= " AND (a.titre LIKE ? OR a.description LIKE ? OR u.pseudo LIKE ?)"; 
+        array_push($values, $recherche, $recherche, $recherche);
+    }
+    if($date != ''){
+        $sqlFinal .= " AND (date_pub >= ?)";
+        array_push($values, $date);
+    }
+    if($categorie > 0){
+        $sqlFinal .= " AND id_categorie = ?";
+        array_push($values, $categorie);
+    }
+
+    try{
+        $pdo = get_pdo();
+        $stmt = $pdo->prepare($sqlFinal); 
+        $stmt->execute($values);                    
+        $rows = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $rows;
     }catch(Exception $e){
         echo "une erreur est survenue $e";
         return null;
@@ -164,7 +210,7 @@ function modifier_usager($nom, $prenom, $courriel, $idUsager){
         if($stmt->rowCount()>0){
             return [true, 'profil modifié avec succès'];
         }else
-            return [false, "données entrées invalides"];
+            return [false, "données entrées inchangées"];
     }catch(Exception $e){
         return [false, "problème avec la base de données: $e"];
     }
@@ -314,6 +360,19 @@ function confirmer_courriel($idUsager){
     }catch(Exception $e){
         //$_SESSION['message']=$e;
         return null;
+    }
+}
+function verifier_email_confirme($idUsager){
+    $sql = 'SELECT email_confirme FROM usager WHERE id = ?';
+
+    try{
+        $pdo = get_pdo();
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$idUsager]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return [$row['email_confirme']];
+    }catch(Exception $e){
+        return [false, $e];
     }
 }
 function changer_mdp($mdpActuel, $nouvMdp, $idUsager){

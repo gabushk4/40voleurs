@@ -15,6 +15,12 @@
     const MAX_PSEUDO = 20;
     const URL_BASE = 'http://142.44.247.33/~usager41/quarante_voleurs/vendre.php';
     $emailConfirme = $_SESSION['email_confirme'];
+
+    if(!$emailConfirme){
+        $idUsager = $_SESSION['id'];
+        if(isset($idUsager))
+            $emailConfirme = verifier_email_confirme($idUsager);
+    }
     
 
     if($emailConfirme): ?>

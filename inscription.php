@@ -55,6 +55,7 @@
                 $_SESSION['pseudo'] = $pseudo;
                 $_SESSION['id'] = $id_usager;
                 $_SESSION['email_confirme'] = false;
+                $_SESSION['courriel'] = $courriel;
                 envoyer_courriel_confirmation($courriel, $id_usager);
                 header("Location: index.php");
                 exit;
